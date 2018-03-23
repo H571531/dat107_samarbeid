@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"><!--Config start: 'Persistence-unit'-->
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+    http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+    version="2.2">
 	<persistence-unit name="personPersistenceUnit" transaction-type="RESOURCE_LOCAL">
 	
 		<class>no.hvl.dat107.Person</class>
 		
 		<properties>
-		    <!--  Generelle JPA properties:-->
+		    <!--  Generelle JPA properties -->
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<!--Server -->
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres" />
-			<!--Brukernavn -->
 			<property name="javax.persistence.jdbc.user" value="postgres" />
-			<!--Passord -->
-			<property name="javax.persistence.jdbc.password" value="postgres" ></property>
+			<property name="javax.persistence.jdbc.password" value="postgres" />
 
-            <!--  OpenJPA properties. Alternativ 1, det enkleste, men gir warning -->
-            <property name="openjpa.RuntimeUnenhancedClasses" value="supported"/>
-            <property name="openjpa.Log" value="DefaultLevel=ERROR"/>
-            
-            <!--  OpenJPA properties. Alternativ 2, litt bedre, men mer komplisert -->
-            <!--  Må da starte programmet med VM arguments = -javaagent:${project_loc}\lib\openjpa-all-2.2.2.jar -->
-            <!--  <property name="openjpa.RuntimeUnenhancedClasses" value="unsupported"/>  -->
-            <!--  <property name="openjpa.Log" value="DefaultLevel=WARN"/> -->
-                    
-            <!--  OpenJPA properties. Logging til fil i stedet for skjerm  -->
-            <!--  <property name="openjpa.Log" value="File=/temp/org.apache.openjpa.log, DefaultLevel=WARN, Runtime=INFO, Tool=INFO"/> -->            
+            <!--  EclipseLink properties -->
+            <!--  Se https://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging -->
+            <property name="eclipselink.logging.level" value="WARNING"/>
 		</properties>
 		
 	</persistence-unit>
