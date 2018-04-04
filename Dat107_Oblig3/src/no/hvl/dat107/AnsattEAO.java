@@ -63,14 +63,13 @@ public class AnsattEAO {
 		
 
 		
-		public void updatePerson(Ansatt p) {
+		public void updateAnsatt(Ansatt p) {
 
 			EntityManager em = emf.createEntityManager();
 
 			try {
 				em.getTransaction().begin();
 				Ansatt q = em.merge(p);
-				
 				
 				em.getTransaction().commit();
 			

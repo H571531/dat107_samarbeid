@@ -23,7 +23,7 @@ public class Ansatt {
 	private LocalDate AnsettelsesDato; 
 	private String Stilling;
 	private BigDecimal manedslonn; 
-	private Avdeling tilhortAvdeling;
+//	private Avdeling tilhortAvdeling;
 	
 	public Ansatt() {
 		 
@@ -36,7 +36,7 @@ public class Ansatt {
 		this.AnsettelsesDato=AnsettelsesDato;
 		this.Stilling=Stilling;
 		this.manedslonn=manedslonn;
-		this.tilhortAvdeling=tilhortAvdeling;
+		//this.tilhortAvdeling=tilhortAvdeling;
 	}
 
 	
@@ -98,19 +98,19 @@ public class Ansatt {
 		this.manedslonn = manedslonn;
 	}
 
-	public Avdeling getTilhortAvdeling() {
+	/*public Avdeling getTilhortAvdeling() {
 		return tilhortAvdeling;
 	}
 
 	public void setTilhortAvdeling(Avdeling tilhortAvdeling) {
 		this.tilhortAvdeling = tilhortAvdeling;
-	}
+	}*/
 
 	@Override
 	public String toString() {
 		return "Ansatt [AnsattId= " + AnsattId + ", Brukernavn= " + Brukernavn + ", fornavn= " + fornavn + ", etternavn="
 				+ etternavn + ", AnsettelsesDato= " + AnsettelsesDato + ", Stilling= " + Stilling + ", manedslonn= "
-				+ manedslonn + ", tilhortAvdeling= " + tilhortAvdeling + "]";
+				+ manedslonn  +  "]";
 	}
 	
 	public void skrivUt() {

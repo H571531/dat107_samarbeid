@@ -6,14 +6,13 @@ public class klient {
 
 	public static void main(String[] args) {
 		AnsattEAO service=new AnsattEAO();
-		//Ansatt Adrian=service.finnAnsattMedPK(1);
+		Ansatt Adrian=service.finnAnsattMedPK(1);
 
+		System.out.println(Adrian);
 		
-		
-		//Adrian.skrivUt();
-		
-		
-		
+		Adrian.setStilling("Teknikker");
+		service.updateAnsatt(Adrian);
+		System.out.println(Adrian);
 		
 	}
 
