@@ -21,6 +21,6 @@ CREATE TABLE Ansatt
 INSERT INTO
   Ansatt(brukernavn,fornavn,etternavn,AnsettelsesDato,Stilling,manedslonn)
 VALUES
-    ('adrmor','Adrian','Mortensen','2008-11-11','Tekniker','32000.2'),
+    ('adrmor','Adrian','Mortensen','2008-11-11','Teknikker','32000.2'),
     ('adrjor','Adrian','Johnsen','2008-11-11','Selger','38000.2'),
     ('adrren','Adrian','Rene','2008-11-11','Sjef','38000.2');
