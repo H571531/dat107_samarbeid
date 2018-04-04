@@ -17,7 +17,6 @@ public class Ansatt {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int AnsattId; //Lages av JPA
 	
-	
 	private String Brukernavn;
 	private String fornavn;
 	private String etternavn;
@@ -25,7 +24,6 @@ public class Ansatt {
 	private String Stilling;
 	private BigDecimal manedslonn; 
 	private Avdeling tilhortAvdeling;
-	private Prosjekt[] tilhorteProsjekter;
 	
 	
 	
