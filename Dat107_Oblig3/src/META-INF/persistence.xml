@@ -4,23 +4,6 @@
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
     http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
     version="2.2"><!--Persistence-unit laget av foreleser-->
-	<persistence-unit name="personPersistenceUnit" transaction-type="RESOURCE_LOCAL">
-	
-		<class>no.hvl.dat107.Person</class>
-		
-		<properties>
-		    <!--  Generelle JPA properties -->
-			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres" />
-			<property name="javax.persistence.jdbc.user" value="postgres" />
-			<property name="javax.persistence.jdbc.password" value="postgres" />
-
-            <!--  EclipseLink properties -->
-            <!--  Se https://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging -->
-            <property name="eclipselink.logging.level" value="WARNING"/>
-		</properties>
-		
-	</persistence-unit>
 	<persistence-unit name="ansattPersistenceUnit" transaction-type="RESOURCE_LOCAL">
 		
 		<class>no.hvl.dat107.Ansatt</class>
@@ -28,8 +11,8 @@
 		<properties>
 		    <!--  Generelle JPA properties -->
 			<property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
-			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/postgres" />
-			<property name="javax.persistence.jdbc.user" value="postgres" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://data1.hib.no:5432/postgres" />
+			<property name="javax.persistence.jdbc.user" value="h571531" />
 			<property name="javax.persistence.jdbc.password" value="postgres" />
 
             <!--  EclipseLink properties -->
