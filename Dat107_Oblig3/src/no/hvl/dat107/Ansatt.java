@@ -114,7 +114,7 @@ public class Ansatt {
 	}
 	
 	public void skrivUt() {
-		toString();
+		System.out.println(toString());
 	}
 	
 	

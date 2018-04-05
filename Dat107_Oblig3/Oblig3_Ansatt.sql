@@ -9,7 +9,7 @@ SET search_path TO Oblig3;
 CREATE TABLE Ansatt
 (
     AnsattId SERIAL,
-	brukernavn VARCHAR(6),
+	brukernavn VARCHAR(4),
 	fornavn VARCHAR(30),
 	etternavn VARCHAR(30),
     AnsettelsesDato DATE,
@@ -18,9 +18,18 @@ CREATE TABLE Ansatt
     CONSTRAINT Ansatt_PK PRIMARY KEY (AnsattId)
 );
 
+CREATE TABLE Avdeling
+(
+
+
+
+)
+
+
+
 INSERT INTO
   Ansatt(brukernavn,fornavn,etternavn,AnsettelsesDato,Stilling,manedslonn)
 VALUES
-    ('adrmor','Adrian','Mortensen','2008-11-11','Teknikker','32000.2'),
-    ('adrjor','Adrian','Johnsen','2008-11-11','Selger','38000.2'),
-    ('adrren','Adrian','Rene','2008-11-11','Sjef','38000.2');
+    ('admo','Adrian','Mortensen','2008-11-11','Teknikker','32000.2'),
+    ('adjo','Adrian','Johnsen','2008-11-11','Selger','38000.2'),
+    ('adre','Adrian','Rene','2008-11-11','Sjef','38000.2');
