@@ -2,7 +2,7 @@ package no.hvl.dat107.klient;
 
 import no.hvl.dat107.*;
 
-public class klient {
+public class Klient_ {
 
 	public static void main(String[] args) {
 		AnsattEAO AnsattService=new AnsattEAO();
