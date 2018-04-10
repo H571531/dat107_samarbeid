@@ -5,14 +5,14 @@ import no.hvl.dat107.*;
 public class klient {
 
 	public static void main(String[] args) {
-		AnsattEAO service=new AnsattEAO();
-		Ansatt Adrian=service.finnAnsattMedPK(1);
+		AnsattEAO AnsattService=new AnsattEAO();
+		Ansatt Adrian=AnsattService.finnAnsattMedPK(1);
 
-		System.out.println(Adrian);
+		Adrian.skrivUt();
 		
 		Adrian.setStilling("Teknikker");
-		service.updateAnsatt(Adrian);
-		System.out.println(Adrian);
+		AnsattService.updateAnsatt(Adrian);
+		Adrian.skrivUt();
 		
 	}
 
