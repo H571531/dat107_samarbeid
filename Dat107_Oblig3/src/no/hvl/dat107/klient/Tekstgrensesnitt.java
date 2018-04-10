@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import no.hvl.dat107.Ansatt;
+import no.hvl.dat107.AnsattEAO;
+import no.hvl.dat107.Avdeling;
+import no.hvl.dat107.Prosjekt;
+
 public class Tekstgrensesnitt {
 	
 	private AnsattEAO ansEAO;
