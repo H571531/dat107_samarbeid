@@ -16,14 +16,14 @@ public class Ansatt {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int AnsattId; // Lages av JPA
+	private int ansattId; // Lages av JPA
 
-	private String Brukernavn;
+	private String brukernavn;
 	private String fornavn;
 	private String etternavn;
-	private LocalDate AnsettelsesDato;
-	private String Stilling;
-	private BigDecimal manedslonn;
+	private LocalDate ansettelsesDato;
+	private String stilling;
+	private BigDecimal maanedsloenn;
 	// private Avdeling tilhortAvdeling;
 	private List<prosjektdeltagelse> deltagelser;
 
@@ -33,12 +33,12 @@ public class Ansatt {
 
 	public Ansatt(String Brukernavn, String fornavn, String etternavn, LocalDate AnsettelsesDato, String Stilling,
 			BigDecimal manedslonn, Avdeling tilhortAvdeling) {
-		this.Brukernavn = Brukernavn;
+		this.brukernavn = Brukernavn;
 		this.fornavn = fornavn;
 		this.etternavn = etternavn;
-		this.AnsettelsesDato = AnsettelsesDato;
-		this.Stilling = Stilling;
-		this.manedslonn = manedslonn;
+		this.ansettelsesDato = AnsettelsesDato;
+		this.stilling = Stilling;
+		this.maanedsloenn = manedslonn;
 		// this.tilhortAvdeling=tilhortAvdeling;
 	}
 
@@ -51,19 +51,19 @@ public class Ansatt {
 	}
 
 	public int getAnsattId() {
-		return AnsattId;
+		return ansattId;
 	}
 
 	public void setAnsattId(int ansattId) {
-		AnsattId = ansattId;
+		this.ansattId = ansattId;
 	}
 
 	public String getBrukernavn() {
-		return Brukernavn;
+		return brukernavn;
 	}
 
 	public void setBrukernavn(String brukernavn) {
-		Brukernavn = brukernavn;
+		this.brukernavn = brukernavn;
 	}
 
 	public String getFornavn() {
@@ -83,27 +83,27 @@ public class Ansatt {
 	}
 
 	public LocalDate getAnsettelsesDato() {
-		return AnsettelsesDato;
+		return ansettelsesDato;
 	}
 
 	public void setAnsettelsesDato(LocalDate ansettelsesDato) {
-		AnsettelsesDato = ansettelsesDato;
+		this.ansettelsesDato = ansettelsesDato;
 	}
 
 	public String getStilling() {
-		return Stilling;
+		return stilling;
 	}
 
 	public void setStilling(String stilling) {
-		Stilling = stilling;
+		this.stilling = stilling;
 	}
 
 	public BigDecimal getManedslonn() {
-		return manedslonn;
+		return maanedsloenn;
 	}
 
 	public void setManedslonn(BigDecimal manedslonn) {
-		this.manedslonn = manedslonn;
+		this.maanedsloenn = manedslonn;
 	}
 
 	/*
@@ -113,15 +113,75 @@ public class Ansatt {
 	 * this.tilhortAvdeling = tilhortAvdeling; }
 	 */
 
+	/**
+	 * Lager String med alle relevante overskrifter for attributter
+	 * @return String som kan brukes som tabelloverskrift for oversikt over ansatte
+	 */
+	public static String lagTabellOverskrift() {
+		return String.format("%3s | %15s | %15s | %15s | %15s | %20s | %15s | %15s | %15s |", "ID", "Brukernavn", "Fornavn", "Etternavn", "Ansatt", "Stilling", "Månedslønn", "Avdeling", "Prosjekter") + "\n";
+		
+	}
+	
 	@Override
 	public String toString() {
-		return "Ansatt [AnsattId= " + AnsattId + ", Brukernavn= " + Brukernavn + ", fornavn= " + fornavn
-				+ ", etternavn=" + etternavn + ", AnsettelsesDato= " + AnsettelsesDato + ", Stilling= " + Stilling
-				+ ", manedslonn= " + manedslonn + "]";
+		StringBuilder sb = new StringBuilder();
+		String stilling = this.stilling;
+		if(sjefFor != null) {
+			stilling += "(S: " + sjefFor.getAvdelingsID() + ")";
+		}
+		
+		sb.append(String.format("%3d | %15s | %15s | %15s | %15s | %20s | %15d | %15s | ", ansattId, brukernavn, fornavn, etternavn, ansettelsesDato.toString(), stilling, maanedsloenn.toString(), ansattVed.getNavn()));
+		
+		if(prosjektDeltakelser.isEmpty()) {
+			sb.append("INGEN");
+		} else {
+			for(Prosjektdeltakelse pd: prosjektDeltakelser) {
+				sb.append(pd.getProsjekt().getProsjektid() + "  ");
+			}
+		}
+		
+		
+		//Hvis ansatt er sjef for en avdeling, legg til info om det
+		return sb.toString();
 	}
-
-	public void skrivUt() {
-		System.out.println(toString());
+	
+	/**
+	 * String med tabell-overskrift, alle den ansattes attributter, og alle prosjekter den ansatte jobber på
+	 * @return String med fullstendig oversikt over den ansatte
+	 */
+	public String toStringMedProsjektTimer() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(lagTabellOverskrift());
+		sb.append(this.toString() + "\n\n");
+		sb.append("PROSJEKTER\n");
+		if(prosjektDeltakelser.size() > 0) {
+			sb.append(prosjekterString());
+		} else {
+			sb.append("\tINGEN");
+		}
+		
+		return sb.toString();
 	}
-
+	
+	/**
+	 * String med alle prosjekter den ansatte jobber på
+	 * @return String med alle prosjekt
+	 */
+	public String prosjekterString() {
+		StringBuilder sb = new StringBuilder();
+		for(Prosjektdeltakelse pd: prosjektDeltakelser) {
+			sb.append("ID: " + pd.getProsjekt().getProsjektid() + " - " + pd.getProsjekt().getProsjektnavn() + " - Rolle: " + pd.getRolle() + " - " + pd.getAntallTimer() + " timer\n");
+		}
+		return sb.toString();
+	}
+	
+	public int totaleTimer() {
+		int antall = 0;
+		if(!prosjektDeltakelser.isEmpty()) {
+			for(Prosjektdeltakelse pd: prosjektDeltakelser) {
+				antall += pd.getAntallTimer();
+			}
+		}
+		return antall;
+	}
 }
