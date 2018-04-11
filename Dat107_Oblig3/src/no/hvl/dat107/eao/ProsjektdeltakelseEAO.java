@@ -20,7 +20,7 @@ public class ProsjektdeltakelseEAO {
 		a.fjernProsjektdeltakelse(p);
 		p.getProsjekt().fjernProsjektdeltakelse(p);	
 	}
-	
+	//
 	public Prosjektdeltakelse finnProsjektdeltagelse(int prosjektdeltagelseID) {
 
 		EntityManager em = emf.createEntityManager();
