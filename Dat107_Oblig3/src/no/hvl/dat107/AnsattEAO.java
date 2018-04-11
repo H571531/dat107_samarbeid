@@ -60,6 +60,7 @@ public class AnsattEAO {
 		}
 		return Ansatte;
 	}
+
 	
 	public Ansatt finnAnsattMedBrukernavn(String brukernavn) {
 		EntityManager em = emf.createEntityManager();
@@ -80,6 +81,7 @@ public class AnsattEAO {
 	}
 
 	
+
 	public void updateAnsatt(Ansatt p) {
 
 		EntityManager em = emf.createEntityManager();
@@ -98,7 +100,9 @@ public class AnsattEAO {
 		}
 	}
 
+
 	public void deletePerson(Ansatt p) {
+
 
 		EntityManager em = emf.createEntityManager();
 
