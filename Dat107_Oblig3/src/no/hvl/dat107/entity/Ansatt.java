@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +19,9 @@ public class Ansatt {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int ansattId; // Lages av JPA
 
+    @OneToMany(mappedBy="ansatt")
+    private List<Prosjektdeltakelse> deltagelser;
+	
 	private String brukernavn;
 	private String fornavn;
 	private String etternavn;
@@ -46,7 +50,7 @@ public class Ansatt {
 		prosjektDeltakelser.add(prosjektdeltakelse);
 	}
 
-	public void fjernProsjektdeltagelse(Prosjektdeltakelse prosjektdeltakelse) {
+	public void fjernProsjektdeltakelse(Prosjektdeltakelse prosjektdeltakelse) {
 		prosjektDeltakelser.remove(prosjektdeltakelse);
 	}
 
@@ -136,7 +140,7 @@ public class Ansatt {
 			sb.append("INGEN");
 		} else {
 			for(Prosjektdeltakelse pd: prosjektDeltakelser) {
-				sb.append(pd.getProsjekt().getProsjektid() + "  ");
+				sb.append(pd.getProsjekt().getProsjektID() + "  ");
 			}
 		}
 		
@@ -170,16 +174,17 @@ public class Ansatt {
 	public String prosjekterString() {
 		StringBuilder sb = new StringBuilder();
 		for(Prosjektdeltakelse pd: prosjektDeltakelser) {
-			sb.append("ID: " + pd.getProsjekt().getProsjektid() + " - " + pd.getProsjekt().getProsjektnavn() + " - Rolle: " + pd.getRolle() + " - " + pd.getAntallTimer() + " timer\n");
+			sb.append("ID: " + pd.getProsjekt().getProsjektID() + " - " + pd.getProsjekt().getProsjektNavn() + " - Rolle: " + pd.getRolle() + " - " + pd.getTimer() + " timer\n");
 		}
 		return sb.toString();
 	}
+
 	
 	public int totaleTimer() {
 		int antall = 0;
 		if(!prosjektDeltakelser.isEmpty()) {
 			for(Prosjektdeltakelse pd: prosjektDeltakelser) {
-				antall += pd.getAntallTimer();
+				antall += pd.getTimer();
 			}
 		}
 		return antall;

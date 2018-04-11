@@ -13,44 +13,44 @@ import javax.persistence.Table;
 public class Prosjekt {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int prosjektID; // Lages av JPA
+	private int Prosjektid; // Lages av JPA
 
-	private String ProsjektNavn;
-	private String Beskrivelse;
+	private String prosjektNavn;
+	private String beskrivelse;
 
 	@OneToMany(mappedBy = "prosjekt")
 	private List<Prosjektdeltakelse> deltagelser;
 
-	public void leggTilProsjektdeltagelse(Prosjektdeltakelse prosjektdeltagelse) {
+	public void leggTilProsjektdeltakelse(Prosjektdeltakelse prosjektdeltagelse) {
 		deltagelser.add(prosjektdeltagelse);
 	}
 
-	public void fjernProsjektdeltagelse(Prosjektdeltakelse prosjektdeltagelse) {
+	public void fjernProsjektdeltakelse(Prosjektdeltakelse prosjektdeltagelse) {
 		deltagelser.remove(prosjektdeltagelse);
 	}
 
 	public int getProsjektID() {
-		return prosjektID;
+		return Prosjektid;
 	}
 
 	public void setProsjektID(int prosjektID) {
-		this.prosjektID = prosjektID;
+		this.Prosjektid = prosjektID;
 	}
 
 	public String getProsjektNavn() {
-		return ProsjektNavn;
+		return prosjektNavn;
 	}
 
 	public void setProsjektNavn(String prosjektNavn) {
-		ProsjektNavn = prosjektNavn;
+		this.prosjektNavn = prosjektNavn;
 	}
 
 	public String getBeskrivelse() {
-		return Beskrivelse;
+		return beskrivelse;
 	}
 
 	public void setBeskrivelse(String beskrivelse) {
-		Beskrivelse = beskrivelse;
+		this.beskrivelse = beskrivelse;
 	}
 
 	public List<Prosjektdeltakelse> getDeltagelser() {

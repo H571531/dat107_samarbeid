@@ -11,11 +11,19 @@ import java.util.Scanner;
 import no.hvl.dat107.eao.AnsattEAO;
 import no.hvl.dat107.eao.AvdelingEAO;
 import no.hvl.dat107.eao.ProsjektEAO;
+
 import no.hvl.dat107.eao.ProsjektdeltakelseEAO;
 import no.hvl.dat107.entity.Ansatt;
 import no.hvl.dat107.entity.Avdeling;
 import no.hvl.dat107.entity.Prosjekt;
 import no.hvl.dat107.entity.Prosjektdeltakelse;
+
+import no.hvl.dat107.eao.prosjektdeltakelseEAO;
+import no.hvl.dat107.entity.Ansatt;
+import no.hvl.dat107.entity.Avdeling;
+import no.hvl.dat107.entity.Prosjekt;
+import no.hvl.dat107.entity.prosjektdeltagelse;
+
 
 public class Tekstgrensesnitt {
 	
