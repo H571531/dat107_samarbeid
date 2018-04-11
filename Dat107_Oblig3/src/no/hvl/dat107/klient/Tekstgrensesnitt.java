@@ -11,18 +11,11 @@ import java.util.Scanner;
 import no.hvl.dat107.eao.AnsattEAO;
 import no.hvl.dat107.eao.AvdelingEAO;
 import no.hvl.dat107.eao.ProsjektEAO;
-
 import no.hvl.dat107.eao.ProsjektdeltakelseEAO;
 import no.hvl.dat107.entity.Ansatt;
 import no.hvl.dat107.entity.Avdeling;
 import no.hvl.dat107.entity.Prosjekt;
 import no.hvl.dat107.entity.Prosjektdeltakelse;
-
-import no.hvl.dat107.eao.prosjektdeltakelseEAO;
-import no.hvl.dat107.entity.Ansatt;
-import no.hvl.dat107.entity.Avdeling;
-import no.hvl.dat107.entity.Prosjekt;
-import no.hvl.dat107.entity.prosjektdeltagelse;
 
 
 public class Tekstgrensesnitt {
@@ -45,6 +38,16 @@ public class Tekstgrensesnitt {
 	 * @param inn Tastatur
 	 */
 	public void visAlleAnsatte(Scanner inn) {
+		System.out.println("aaa");
+		Ansatt ansatt = ansEAO.finnAnsattMedId(1);
+		System.out.println(ansatt.getAnsattid());
+		System.out.println(ansatt.getBrukernavn());
+		System.out.println(ansatt.getFornavn());
+		System.out.println(ansatt.getStilling());
+		System.out.println(ansatt.getAnsettelsesdato());
+		System.out.println(ansatt.getMaanedsloenn());
+		
+		//System.out.println("aaaa" + ansatt.getMaanedsloenn().toString());
 		
 		System.out.println("Viser alle ansatte: ");
 		System.out.print(Ansatt.lagTabellOverskrift());
@@ -57,7 +60,7 @@ public class Tekstgrensesnitt {
 		
 		for(Ansatt a: ansattListe) {
 			System.out.println(a);
-			gyldigId.add(a.getAnsattId());
+			gyldigId.add(a.getAnsattid());
 		}
 		System.out.print(lagStrek());
 		
@@ -134,7 +137,7 @@ public class Tekstgrensesnitt {
 				input = inn.next();
 				inn.nextLine();
 				if(input.equalsIgnoreCase("j")) {
-					oppdaterAnsatt(inn, ansatt.getAnsattId());
+					oppdaterAnsatt(inn, ansatt.getAnsattid());
 				} else {
 					System.out.println("Går tilbake til meny...\n");
 				}
@@ -199,7 +202,7 @@ public class Tekstgrensesnitt {
 				System.out.println("Skriv ansettelsesdato (YYYY-MM-DD): ");
 				
 				try {
-					a.setAnsettelsesDato(LocalDate.parse(inn.nextLine()));
+					a.setAnsettelsesdato(LocalDate.parse(inn.nextLine()));
 					ok = true;
 				} catch(DateTimeParseException e) {
 					System.out.println("Feil dato-format, Skriv YYYY-MM-DD, f. eks " + LocalDate.now());
@@ -304,7 +307,7 @@ public class Tekstgrensesnitt {
 			
 			System.out.println("Oppdaterer: \n" + pd);
 			System.out.println("Hvor mange timer har den ansatte jobbet?");
-			pd.setAntallTimer(inn.nextInt());
+			pd.setTimer(inn.nextInt());
 			inn.nextLine();
 			
 			
@@ -569,7 +572,7 @@ public class Tekstgrensesnitt {
 		for(Prosjekt prosjekt: prosjekter) {
 			System.out.println(prosjekt);
 			System.out.print(lagStrek());
-			gyldigeProsjekt.add(prosjekt.getProsjektid());
+			gyldigeProsjekt.add(prosjekt.getProsjektId());
 		}
 		
 		int valg = 0;
@@ -641,7 +644,7 @@ public class Tekstgrensesnitt {
 			case 1:
 				//Oppdatere navn
 				System.out.println("Skriv nytt prosjektnavn: ");
-				prosjekt.setProsjektnavn(inn.nextLine());
+				prosjekt.setProsjektNavn(inn.nextLine());
 				prosjektEAO.oppdaterProsjekt(prosjekt);
 				break;
 			case 2:
@@ -661,7 +664,7 @@ public class Tekstgrensesnitt {
 				break;
 			case 4:
 				//Oppdatere timetall
-				System.out.println("Ansatte som arbeider på " + prosjekt.getProsjektnavn());
+				System.out.println("Ansatte som arbeider på " + prosjekt.getProsjektNavn());
 				prosjekt.visAnsatte();
 				System.out.println("Skriv ansattID til ansatt som skal oppdateres: ");
 				Ansatt ansatt = ansEAO.finnAnsattMedId(inn.nextInt());
@@ -674,7 +677,7 @@ public class Tekstgrensesnitt {
 				int antallTimer = inn.nextInt();
 				inn.nextLine();
 				
-				pdTilOppdatering.setAntallTimer(antallTimer);
+				pdTilOppdatering.setTimer(antallTimer);
 				pdEAO.oppdaterPD(pdTilOppdatering);
 				
 				
@@ -689,7 +692,7 @@ public class Tekstgrensesnitt {
 			System.out.println("Prosjekt etter oppdatering:");
 			System.out.println(lagStrek());
 			
-			System.out.println(prosjektEAO.finnProsjektMedId(prosjekt.getProsjektid()));
+			System.out.println(prosjektEAO.finnProsjektMedId(prosjekt.getProsjektId()));
 		} while(valg != 0);
 	}
 	

@@ -8,21 +8,22 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
+import no.hvl.dat107.entity.Ansatt;
 import no.hvl.dat107.entity.Avdeling;
 
 public class AvdelingEAO {
 	private EntityManagerFactory emf;
 	
 	public AvdelingEAO() {
-		emf = Persistence.createEntityManagerFactory("avdelingPersistenceUnit");
+		emf = Persistence.createEntityManagerFactory("ansattPersistenceUnit");
 	}
 	
-	public Avdeling finnAvdelingMedId(int AvdelingId) {
+	public Avdeling finnAvdelingMedId(int avdelingId) {
 		EntityManager em = emf.createEntityManager();
 		
 		Avdeling avdeling = null;
 		try {
-			avdeling = em.find(Avdeling.class, AvdelingId);
+			avdeling = em.find(Avdeling.class, avdelingId);
 		} finally {
 			em.close();
 		}
@@ -46,13 +47,13 @@ public class AvdelingEAO {
 		}
 	}
 	
-	public List<Avdeling> hentAvdelinger() {
+	public List<Avdeling> hentAlleAvdelinger() {
 		
 		EntityManager em = emf.createEntityManager();
 		
 		List<Avdeling> Avdelinger = null;
 		try {
-			TypedQuery<Avdeling> query = em.createQuery("SELECT p FROM oblig3.avdeling p", Avdeling.class);
+			TypedQuery<Avdeling> query = em.createQuery("SELECT a FROM Avdeling a ORDER BY a.avdelingsID", Avdeling.class);
 			Avdelinger = query.getResultList();
 		} finally {
 			em.close();
@@ -66,12 +67,30 @@ public class AvdelingEAO {
 		
 		try {
 			em.getTransaction().begin();
-			Avdeling b = em.merge(a);
+			em.merge(a);
 			
 			em.getTransaction().commit();
 		} catch(Throwable e) {
 			e.printStackTrace();
 			em.getTransaction().rollback();
+		} finally {
+			em.close();
+		}
+	}
+	
+	public void oppdaterNySjef(Avdeling avdeling, Ansatt ansatt) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		
+		try {
+			tx.begin();
+			
+			ansatt = em.merge(ansatt);
+			avdeling = em.merge(avdeling);
+			
+			avdeling.setSjef(ansatt);
+			
+			tx.commit();
 		} finally {
 			em.close();
 		}

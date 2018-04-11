@@ -42,7 +42,7 @@ CREATE TABLE prosjektdeltakelse(
 	--lager surrogatnøkkel for lettere JPA
 	ansattid INTEGER,
 	prosjektid INTEGER,
-	antallTimer INTEGER,
+	timer INTEGER,
 	rolle VARCHAR(30),
 	
 	CONSTRAINT deltakelsePK PRIMARY KEY(ansattid, prosjektid),

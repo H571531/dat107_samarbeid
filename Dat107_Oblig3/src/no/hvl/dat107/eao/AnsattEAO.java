@@ -10,6 +10,7 @@ import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import no.hvl.dat107.entity.Ansatt;
+import no.hvl.dat107.entity.Avdeling;
 
 public class AnsattEAO {
 	private EntityManagerFactory emf;
@@ -31,15 +32,18 @@ public class AnsattEAO {
 		return ansatt;
 	}
 
-	public void lagAnsatt(Ansatt p) {
+	public int settInnAnsatt(Ansatt a) {
+		
 
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 
 		try {
-			tx.begin();
-			em.persist(p);
-			tx.commit();
+			Avdeling avd = em.merge(a.getAnsattVed());
+	           
+            em.persist(a);
+            
+            avd.getAnsattListe().add(a);
 
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -47,20 +51,21 @@ public class AnsattEAO {
 		} finally {
 			em.close();
 		}
+		return a.getAnsattid();
 	}
 
 	public List<Ansatt> hentAlleAnsatte() {
 
 		EntityManager em = emf.createEntityManager();
 
-		List<Ansatt> Ansatte = null;
+		List<Ansatt> ansatte = null;
 		try {
-			TypedQuery<Ansatt> query = em.createQuery("SELECT p FROM oblig3.ansatt p", Ansatt.class);
-			Ansatte = query.getResultList();
+			TypedQuery<Ansatt> query = em.createQuery("SELECT a FROM Ansatt a", Ansatt.class);
+			ansatte = query.getResultList();
 		} finally {
 			em.close();
 		}
-		return Ansatte;
+		return ansatte;
 	}
 
 	

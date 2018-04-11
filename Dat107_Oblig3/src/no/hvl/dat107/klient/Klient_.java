@@ -6,6 +6,7 @@ import no.hvl.dat107.entity.*;
 public class Klient_ {
 
 	public static void main(String[] args) {
+		/*
 		AnsattEAO AnsattService=new AnsattEAO();
 		Ansatt Adrian=AnsattService.finnAnsattMedPK(1);
 
@@ -14,7 +15,7 @@ public class Klient_ {
 		Adrian.setStilling("Teknikker");
 		AnsattService.updateAnsatt(Adrian);
 		Adrian.skrivUt();
-		
+		*/
 	}
 
 }
