@@ -1,4 +1,4 @@
-package no.hvl.dat107;
+package no.hvl.dat107.eao;
 
 import java.util.List;
 
@@ -8,6 +8,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+
+import no.hvl.dat107.entity.Ansatt;
 
 public class AnsattEAO {
 	private EntityManagerFactory emf;
