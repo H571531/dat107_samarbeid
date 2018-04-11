@@ -102,11 +102,11 @@ public class Ansatt {
 		this.stilling = stilling;
 	}
 
-	public BigDecimal getManedslonn() {
+	public BigDecimal getMaanedsloenn() {
 		return maanedsloenn;
 	}
 
-	public void setManedslonn(BigDecimal manedslonn) {
+	public void setMaanedsloenn(BigDecimal manedslonn) {
 		this.maanedsloenn = manedslonn;
 	}
 
