@@ -13,8 +13,12 @@ public class ProsjektdeltakelseEAO {
 	
 	
 	public void fjernAnsattFraDeltagelse(Ansatt a, Prosjektdeltakelse p) {
+		EntityManager em = emf.createEntityManager();
+		p=em.merge(p);
+		em.remove(p);
+		
 		a.fjernProsjektdeltakelse(p);
-		p.getProsjekt().fjernProsjektdeltakelse(p);
+		p.getProsjekt().fjernProsjektdeltakelse(p);	
 	}
 	
 	public Prosjektdeltakelse finnProsjektdeltagelse(int prosjektdeltagelseID) {
