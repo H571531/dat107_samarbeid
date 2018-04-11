@@ -14,7 +14,7 @@ import javax.persistence.Table;
 //JPA-annotations
 @Entity
 @Table(name = "prosjekt", schema = "oblig3")
-public class prosjektdeltagelse {
+public class Prosjektdeltakelse {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,15 +30,15 @@ public class prosjektdeltagelse {
 	@JoinColumn(name = "prosjektId")
 	private Prosjekt prosjekt;
 
-	public prosjektdeltagelse() {
+	public Prosjektdeltakelse() {
 	}
 
-	public prosjektdeltagelse(Ansatt ansatt, Prosjekt prosjekt, int timer) {
+	public Prosjektdeltakelse(Ansatt ansatt, Prosjekt prosjekt, int timer) {
 		this.ansatt = ansatt;
 		this.prosjekt = prosjekt;
 		this.timer = timer;
 
-		// Hvis vi gjør dette her slipper vi å gjøre det i EAO
+		// Hvis vi gjï¿½r dette her slipper vi ï¿½ gjï¿½re det i EAO
 		ansatt.leggTilProsjektdeltagelse(this);
 		prosjekt.leggTilProsjektdeltagelse(this);
 	}
