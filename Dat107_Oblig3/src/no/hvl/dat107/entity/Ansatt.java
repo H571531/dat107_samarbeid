@@ -25,7 +25,7 @@ public class Ansatt {
 	private String stilling;
 	private BigDecimal maanedsloenn;
 	// private Avdeling tilhortAvdeling;
-	private List<prosjektdeltagelse> deltagelser;
+	private List<Prosjektdeltakelse> prosjektDeltakelser;
 
 	public Ansatt() {
 
@@ -42,12 +42,12 @@ public class Ansatt {
 		// this.tilhortAvdeling=tilhortAvdeling;
 	}
 
-	public void leggTilProsjektdeltagelse(prosjektdeltagelse prosjektdeltagelse) {
-		deltagelser.add(prosjektdeltagelse);
+	public void leggTilProsjektdeltakelse(Prosjektdeltakelse prosjektdeltakelse) {
+		prosjektDeltakelser.add(prosjektdeltakelse);
 	}
 
-	public void fjernProsjektdeltagelse(prosjektdeltagelse prosjektdeltagelse) {
-		deltagelser.remove(prosjektdeltagelse);
+	public void fjernProsjektdeltagelse(Prosjektdeltakelse prosjektdeltakelse) {
+		prosjektDeltakelser.remove(prosjektdeltakelse);
 	}
 
 	public int getAnsattId() {
