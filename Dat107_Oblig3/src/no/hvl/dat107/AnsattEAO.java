@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
@@ -60,6 +61,27 @@ public class AnsattEAO {
 		return Ansatte;
 	}
 
+	
+	public Ansatt finnAnsattMedBrukernavn(String brukernavn) {
+		EntityManager em = emf.createEntityManager();
+		
+		Ansatt ut = null;
+		String queryString = "SELECT a FROM Ansatt a WHERE a.brukernavn = :brukernavn";
+		
+		try {
+			TypedQuery<Ansatt> query = em.createQuery(queryString, Ansatt.class);
+			query.setParameter("brukernavn", brukernavn);
+			ut = query.getSingleResult();
+		} catch(NoResultException e) {
+			System.out.println("Finner ikke ansatt!");
+		} finally {
+			em.close();
+		}
+		return ut;
+	}
+
+	
+
 	public void updateAnsatt(Ansatt p) {
 
 		EntityManager em = emf.createEntityManager();
@@ -78,7 +100,9 @@ public class AnsattEAO {
 		}
 	}
 
-	public void deleteAnsatt(Ansatt p) {
+
+	public void deletePerson(Ansatt p) {
+
 
 		EntityManager em = emf.createEntityManager();
 

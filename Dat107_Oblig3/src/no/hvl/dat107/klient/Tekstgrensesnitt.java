@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import no.hvl.dat107.Ansatt;
-import no.hvl.dat107.AnsattEAO;
-import no.hvl.dat107.Avdeling;
-import no.hvl.dat107.Prosjekt;
+import no.hvl.dat107.eao.AnsattEAO;
 import no.hvl.dat107.eao.AvdelingEAO;
 import no.hvl.dat107.eao.ProsjektEAO;
 import no.hvl.dat107.eao.ProsjektdeltakelseEAO;
+import no.hvl.dat107.entity.Ansatt;
+import no.hvl.dat107.entity.Avdeling;
+import no.hvl.dat107.entity.Prosjekt;
 import no.hvl.dat107.entity.Prosjektdeltakelse;
 
 public class Tekstgrensesnitt {
@@ -161,6 +161,8 @@ public class Tekstgrensesnitt {
 		System.out.println("7. Bytt avdeling");
 		System.out.println("8. Legg til prosjekt");
 		System.out.println("9. Oppdater timer på prosjekt");
+		System.out.println("10. Fjern ansatt fra prosjekt");
+		System.out.println("11. Fjern ansatt");
 		System.out.println("----------------------------");
 		System.out.println("0. Tilbake til hovedmeny");
 
@@ -287,8 +289,18 @@ public class Tekstgrensesnitt {
 
 			break;
 
+		case 10:
+			fjernProsjektdeltakelse(inn, a, null);
+			break;
+		case 11:
+			fjernAnsatt(inn, a);
+			return;
+
 		case 0:
 			return;
+		default:
+			System.out.println("Ugyldig valg! ");
+			break;
 		}
 
 		// ansEAO.oppdaterAnsatt(a);
@@ -361,6 +373,20 @@ public class Tekstgrensesnitt {
 		System.out.println(ansEAO.finnAnsattMedId(nyId).toStringMedProsjektTimer());
 
 	}
+
+	
+	public void fjernAnsatt(Scanner inn, Ansatt ans) {
+		//Ikke lov å slette ansatt hvis ansatt er sjef, eller hvis ansatt har registrert timer i et prosjekt
+		if(ans.getSjefFor() != null) {
+			System.out.println("Kan ikke slette ansatt som er sjef!");
+		} else if(ans.totaleTimer() > 0) {
+			System.out.println("Kan ikke slette ansatt som har registrerte timer i et prosjekt!");
+		} else {
+			System.out.println("Sletter ansatt...");
+			ansEAO.fjernAnsatt(ans);
+		}
+	}
+	
 
 	/**
 	 * Henter alle avdelinger i databasen og viser disse, inkludert ansatte, i
@@ -581,6 +607,7 @@ public class Tekstgrensesnitt {
 			System.out.println("2. Oppdater prosjektbeskrivelse");
 			System.out.println("3. Legg til en ansatt til et prosjekt");
 			System.out.println("4. Oppdater timer på prosjekt for en ansatt");
+			System.out.println("5. Fjern en ansatt");
 			System.out.println(lagStrek());
 			System.out.println("0. Avbryt");
 
@@ -612,6 +639,7 @@ public class Tekstgrensesnitt {
 			case 4:
 				// Oppdatere timetall
 				System.out.println("Ansatte som arbeider på " + prosjekt.getProsjektnavn());
+
 				System.out.println(Ansatt.lagTabellOverskrift());
 				System.out.println(Tekstgrensesnitt.lagStrek());
 
@@ -621,6 +649,9 @@ public class Tekstgrensesnitt {
 
 				}
 				System.out.println(Tekstgrensesnitt.lagStrek());
+
+				prosjekt.visAnsatte();
+
 				System.out.println("Skriv ansattID til ansatt som skal oppdateres: ");
 				Ansatt ansatt = ansEAO.finnAnsattMedId(inn.nextInt());
 				Prosjektdeltakelse pdTilOppdatering = pdEAO.finnPDMedAnsattOgProsjekt(ansatt, prosjekt);
@@ -636,6 +667,9 @@ public class Tekstgrensesnitt {
 				pdEAO.oppdaterPD(pdTilOppdatering);
 
 				break;
+			case 5:
+				fjernProsjektdeltakelse(inn, null, prosjekt);
+				break;
 			case 0:
 				return;
 
@@ -643,7 +677,36 @@ public class Tekstgrensesnitt {
 			System.out.println("Prosjekt etter oppdatering:");
 			System.out.println(lagStrek());
 			System.out.println(prosjektEAO.finnProsjektMedId(prosjekt.getProsjektid()));
+
 		} while (valg != 0);
+
+
+		} while(valg != 0);
+	}
+	
+	public void fjernProsjektdeltakelse(Scanner inn, Ansatt ans, Prosjekt prosjekt) {
+		if(prosjekt == null) {
+			System.out.println("Prosjekter den ansatte er registrert ved: ");
+			System.out.println(ans.prosjekterString());
+			System.out.println("\nAngi prosjekt den ansatte skal fjernes fra:");
+			prosjekt = prosjektEAO.finnProsjektMedId(inn.nextInt());
+			inn.nextLine();
+		} else if(ans == null) {
+			System.out.println("Ansatte som arbeider på prosjektet:");
+			prosjekt.visAnsatte();
+			System.out.println("\nAngi ansatt som skal fjernes fra prosjektet:");
+			ans = ansEAO.finnAnsattMedId(inn.nextInt());
+			inn.nextLine();
+		}
+		
+		System.out.println("Fjerner prosjektdeltakelse...\n");
+		pdEAO.fjernProsjektdeltakelse(ans, prosjekt);
+		
+		//Viser oppdatert prosjekt/ansatt i kallende metode, ikke nødvendig å vise her
+		//System.out.println("Prosjekt etter fjerning:\n" + prosjektEAO.finnProsjektMedId(prosjekt.getProsjektid()));
+		//System.out.println("\nDen ansatte etter fjerning:\n" + ansEAO.finnAnsattMedId(ans.getAnsattid()));
+	
+		
 
 	}
 
