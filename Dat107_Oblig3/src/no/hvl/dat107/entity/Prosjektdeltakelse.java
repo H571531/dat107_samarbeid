@@ -13,34 +13,36 @@ import javax.persistence.Table;
 //JPA-annotations 
 
 @Entity
-@Table(name = "prosjekt", schema = "oblig3")
-@IdClass(ProsjektdeltagelsePK.class)
+@Table(name = "prosjektdeltakelse", schema = "oblig3")
+@IdClass(ProsjektdeltakelsePK.class)
 public class Prosjektdeltakelse {
 
-	private int timer;
+	
 
+	@Id
 	@ManyToOne
 	@JoinColumn(name = "ansattId")
 	private Ansatt ansatt;
 
     @Id
     @ManyToOne
-    @JoinColumn(name="ProsjektId")
+    @JoinColumn(name="prosjektId")
     private Prosjekt prosjekt;
 
-    private String Rolle; 
+    private int timer;
+    private String rolle; 
 
 	public Prosjektdeltakelse() {
 	}
 
-	public Prosjektdeltakelse(Ansatt ansatt, Prosjekt prosjekt, int timer,String rolle) {
+	public Prosjektdeltakelse(Ansatt ansatt, Prosjekt prosjekt, String rolle,int timer) {
 		this.ansatt = ansatt;
 		this.prosjekt = prosjekt;
 		this.timer = timer;
-		this.Rolle=rolle;
+		this.rolle=rolle;
 
-		// Hvis vi gjør dette her slipper vi å gjøre det i EAO
-		ansatt.leggTilProsjektdeltakelse(this);
+		// Hvis vi gjï¿½r dette her slipper vi ï¿½ gjï¿½re det i EAO
+		//ansatt.leggTilProsjektdeltakelse(this);
 		prosjekt.leggTilProsjektdeltakelse(this);
 	}
 
@@ -70,11 +72,11 @@ public class Prosjektdeltakelse {
 	
 
 	public String getRolle() {
-		return Rolle;
+		return rolle;
 	}
 
 	public void setRolle(String rolle) {
-		Rolle = rolle;
+		this.rolle = rolle;
 	}
 
 	public void skrivUt(String innrykk) {

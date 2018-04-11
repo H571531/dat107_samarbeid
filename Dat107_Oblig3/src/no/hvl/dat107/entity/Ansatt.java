@@ -4,118 +4,78 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "ansatt", schema = "oblig3")
 public class Ansatt {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int ansattId; // Lages av JPA
-
-    @OneToMany(mappedBy="ansatt")
-    private List<Prosjektdeltakelse> deltagelser;
 	
-	private String brukernavn;
-	private String fornavn;
-	private String etternavn;
-	private LocalDate ansettelsesDato;
-	private String stilling;
-	private BigDecimal maanedsloenn;
-	// private Avdeling tilhortAvdeling;
-	private List<Prosjektdeltakelse> prosjektDeltakelser;
-
-	public Ansatt() {
-
-	}
-
-	public Ansatt(String Brukernavn, String fornavn, String etternavn, LocalDate AnsettelsesDato, String Stilling,
-			BigDecimal manedslonn, Avdeling tilhortAvdeling) {
-		this.brukernavn = Brukernavn;
-		this.fornavn = fornavn;
-		this.etternavn = etternavn;
-		this.ansettelsesDato = AnsettelsesDato;
-		this.stilling = Stilling;
-		this.maanedsloenn = manedslonn;
-		// this.tilhortAvdeling=tilhortAvdeling;
-	}
-
-	public void leggTilProsjektdeltakelse(Prosjektdeltakelse prosjektdeltakelse) {
-		prosjektDeltakelser.add(prosjektdeltakelse);
-	}
-
-	public void fjernProsjektdeltakelse(Prosjektdeltakelse prosjektdeltakelse) {
-		prosjektDeltakelser.remove(prosjektdeltakelse);
-	}
-
-	public int getAnsattId() {
-		return ansattId;
-	}
-
-	public void setAnsattId(int ansattId) {
-		this.ansattId = ansattId;
-	}
-
-	public String getBrukernavn() {
-		return brukernavn;
-	}
-
-	public void setBrukernavn(String brukernavn) {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int ansattid;
+    
+    private String brukernavn;
+    private String fornavn;
+    private String etternavn;
+    private LocalDate ansettelsesdato;
+    private String stilling;
+    private BigDecimal maanedsloenn;
+    
+    @OneToOne(mappedBy = "sjef")
+    private Avdeling sjefFor;
+    
+    @ManyToOne
+    @JoinColumn(name = "avdelingsID", referencedColumnName = "avdelingsID")
+    private Avdeling ansattVed;
+    
+    /*
+    //JoinTable - må ha med OBLIG3.prosjektdeltakelse når prosjektdeltakelse ikke er en klasse
+    @ManyToMany(cascade = CascadeType.PERSIST)
+	@JoinTable(name="oblig3.prosjektdeltakelse", joinColumns = @JoinColumn(name="ansattid"), inverseJoinColumns = @JoinColumn(name = "prosjektid"))
+    private List<Prosjekt> prosjekter;
+    
+    */
+    
+    @OneToMany(mappedBy = "ansatt", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Prosjektdeltakelse> prosjektDeltakelser;
+    
+    //Må ha default constructor for JPA
+    public Ansatt() {
+    }
+    
+	
+    /**
+     * 
+     * @param brukernavn Brukernavn
+     * @param fornavn Fornavn
+     * @param etternavn Etternavn
+     * @param ansettelsesdato Dato for ansettelse, YYYY-MM-DD
+     * @param stilling, Stilling
+     * @param maanedsloenn Månedslønn
+     * @param ansattVed Avdeling den ansatte jobber
+     */
+	public Ansatt(String brukernavn, String fornavn, String etternavn, LocalDate ansettelsesdato,
+			String stilling, BigDecimal maanedsloenn, Avdeling ansattVed) {
 		this.brukernavn = brukernavn;
-	}
-
-	public String getFornavn() {
-		return fornavn;
-	}
-
-	public void setFornavn(String fornavn) {
 		this.fornavn = fornavn;
-	}
-
-	public String getEtternavn() {
-		return etternavn;
-	}
-
-	public void setEtternavn(String etternavn) {
 		this.etternavn = etternavn;
-	}
-
-	public LocalDate getAnsettelsesDato() {
-		return ansettelsesDato;
-	}
-
-	public void setAnsettelsesDato(LocalDate ansettelsesDato) {
-		this.ansettelsesDato = ansettelsesDato;
-	}
-
-	public String getStilling() {
-		return stilling;
-	}
-
-	public void setStilling(String stilling) {
+		this.ansettelsesdato = ansettelsesdato;
 		this.stilling = stilling;
+		this.maanedsloenn = maanedsloenn;
+		this.ansattVed = ansattVed;
 	}
 
-	public BigDecimal getMaanedsloenn() {
-		return maanedsloenn;
-	}
 
-	public void setMaanedsloenn(BigDecimal manedslonn) {
-		this.maanedsloenn = manedslonn;
-	}
-
-	/*
-	 * public Avdeling getTilhortAvdeling() { return tilhortAvdeling; }
-	 * 
-	 * public void setTilhortAvdeling(Avdeling tilhortAvdeling) {
-	 * this.tilhortAvdeling = tilhortAvdeling; }
-	 */
 
 	/**
 	 * Lager String med alle relevante overskrifter for attributter
@@ -134,13 +94,13 @@ public class Ansatt {
 			stilling += "(S: " + sjefFor.getAvdelingsID() + ")";
 		}
 		
-		sb.append(String.format("%3d | %15s | %15s | %15s | %15s | %20s | %15d | %15s | ", ansattId, brukernavn, fornavn, etternavn, ansettelsesDato.toString(), stilling, maanedsloenn.toString(), ansattVed.getNavn()));
+		sb.append(String.format("%3d | %15s | %15s | %15s | %15s | %20s | %15s | %15s | ", ansattid, brukernavn, fornavn, etternavn, ansettelsesdato.toString(), stilling, maanedsloenn.toString(), ansattVed.getNavn()));
 		
 		if(prosjektDeltakelser.isEmpty()) {
 			sb.append("INGEN");
 		} else {
 			for(Prosjektdeltakelse pd: prosjektDeltakelser) {
-				sb.append(pd.getProsjekt().getProsjektID() + "  ");
+				sb.append(pd.getProsjekt().getProsjektId() + "  ");
 			}
 		}
 		
@@ -174,11 +134,10 @@ public class Ansatt {
 	public String prosjekterString() {
 		StringBuilder sb = new StringBuilder();
 		for(Prosjektdeltakelse pd: prosjektDeltakelser) {
-			sb.append("ID: " + pd.getProsjekt().getProsjektID() + " - " + pd.getProsjekt().getProsjektNavn() + " - Rolle: " + pd.getRolle() + " - " + pd.getTimer() + " timer\n");
+			sb.append("ID: " + pd.getProsjekt().getProsjektId() + " - " + pd.getProsjekt().getProsjektNavn() + " - Rolle: " + pd.getRolle() + " - " + pd.getTimer() + " timer\n");
 		}
 		return sb.toString();
 	}
-
 	
 	public int totaleTimer() {
 		int antall = 0;
@@ -189,4 +148,83 @@ public class Ansatt {
 		}
 		return antall;
 	}
+
+
+
+	public int getAnsattid() {
+		return ansattid;
+	}
+
+	public void setAnsattid(int ansattid) {
+		this.ansattid = ansattid;
+	}
+
+	public String getBrukernavn() {
+		return brukernavn;
+	}
+
+	public void setBrukernavn(String brukernavn) {
+		this.brukernavn = brukernavn;
+	}
+
+	public String getFornavn() {
+		return fornavn;
+	}
+	public void setFornavn(String fornavn) {
+		this.fornavn = fornavn;
+	}
+	public String getEtternavn() {
+		return etternavn;
+	}
+	public void setEtternavn(String etternavn) {
+		this.etternavn = etternavn;
+	}
+	public LocalDate getAnsettelsesdato() {
+		return ansettelsesdato;
+	}
+	public void setAnsettelsesdato(LocalDate ansettelsesdato) {
+		this.ansettelsesdato = ansettelsesdato;
+	}
+	public String getStilling() {
+		return stilling;
+	}
+	public void setStilling(String stilling) {
+		this.stilling = stilling;
+	}
+	public BigDecimal getMaanedsloenn() {
+		return maanedsloenn;
+	}
+	public void setMaanedsloenn(BigDecimal maanedsloenn) {
+		this.maanedsloenn = maanedsloenn;
+	}
+	public Avdeling getAnsattVed() {
+		return ansattVed;
+	}
+	public void setAnsattVed(Avdeling ansattVed) {
+		this.ansattVed = ansattVed;
+	}
+
+
+	public Avdeling getSjefFor() {
+		return sjefFor;
+	}
+
+
+	public void setSjefFor(Avdeling sjefFor) {
+		this.sjefFor = sjefFor;
+		
+	}
+
+
+	public List<Prosjektdeltakelse> getProsjektDeltakelser() {
+		return prosjektDeltakelser;
+	}
+
+
+	public void setProsjektDeltakelser(List<Prosjektdeltakelse> prosjektDeltakelser) {
+		this.prosjektDeltakelser = prosjektDeltakelser;
+	}
+	
+	
+
 }
