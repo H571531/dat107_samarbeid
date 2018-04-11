@@ -28,14 +28,16 @@ public class Prosjektdeltakelse {
     @JoinColumn(name="ProsjektId")
     private Prosjekt prosjekt;
 
+    private String Rolle; 
 
 	public Prosjektdeltakelse() {
 	}
 
-	public Prosjektdeltakelse(Ansatt ansatt, Prosjekt prosjekt, int timer) {
+	public Prosjektdeltakelse(Ansatt ansatt, Prosjekt prosjekt, int timer,String rolle) {
 		this.ansatt = ansatt;
 		this.prosjekt = prosjekt;
 		this.timer = timer;
+		this.Rolle=rolle;
 
 		// Hvis vi gjør dette her slipper vi å gjøre det i EAO
 		ansatt.leggTilProsjektdeltakelse(this);
@@ -64,6 +66,15 @@ public class Prosjektdeltakelse {
 
 	public void setProsjekt(Prosjekt prosjekt) {
 		this.prosjekt = prosjekt;
+	}
+	
+
+	public String getRolle() {
+		return Rolle;
+	}
+
+	public void setRolle(String rolle) {
+		Rolle = rolle;
 	}
 
 	public void skrivUt(String innrykk) {
