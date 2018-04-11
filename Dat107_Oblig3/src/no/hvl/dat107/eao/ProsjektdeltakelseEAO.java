@@ -6,42 +6,42 @@ import javax.persistence.EntityTransaction;
 
 import no.hvl.dat107.entity.Ansatt;
 import no.hvl.dat107.entity.Prosjekt;
-import no.hvl.dat107.entity.prosjektdeltagelse;
+import no.hvl.dat107.entity.Prosjektdeltakelse;
 
 public class ProsjektdeltakelseEAO {
 	private EntityManagerFactory emf;
 	
 	
-	public void fjernAnsattFraDeltagelse(Ansatt a, prosjektdeltagelse p) {
-		a.fjernProsjektdeltagelse(p);
-		p.getProsjekt().fjernProsjektdeltagelse(p);
+	public void fjernAnsattFraDeltagelse(Ansatt a, Prosjektdeltakelse p) {
+		a.fjernProsjektdeltakelse(p);
+		p.getProsjekt().fjernProsjektdeltakelse(p);
 	}
 	
-	public prosjektdeltagelse finnProsjektdeltagelse(int prosjektdeltagelseID) {
+	public Prosjektdeltakelse finnProsjektdeltagelse(int prosjektdeltagelseID) {
 
 		EntityManager em = emf.createEntityManager();
 
-		prosjektdeltagelse prosjektdeltagelsen = null;
+		Prosjektdeltakelse prosjektdeltagelsen = null;
 		try {
-			prosjektdeltagelsen = em.find(prosjektdeltagelse.class, prosjektdeltagelseID);
+			prosjektdeltagelsen = em.find(Prosjektdeltakelse.class, prosjektdeltagelseID);
 		} finally {
 			em.close();
 		}
 		return prosjektdeltagelsen;
 	}
 	
-	public void ForTimer(prosjektdeltagelse p, int timer) {
+	public void ForTimer(Prosjektdeltakelse p, int timer) {
 		p.setTimer(p.getTimer()+timer);
 		updateProsjektDeltakelse(p);
 	}
 	
-	public void updateProsjektDeltakelse(prosjektdeltagelse p) {
+	public void updateProsjektDeltakelse(Prosjektdeltakelse p) {
 
 		EntityManager em = emf.createEntityManager();
 
 		try {
 			em.getTransaction().begin();
-			prosjektdeltagelse q = em.merge(p);
+			Prosjektdeltakelse q = em.merge(p);
 
 			em.getTransaction().commit();
 
