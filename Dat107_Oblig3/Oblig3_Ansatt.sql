@@ -66,17 +66,17 @@ VALUES
 INSERT INTO ansatt
 VALUES
 	(DEFAULT, 'ansi', 'Anders', 'Simonsen', '2017-08-01', 'Avdelingssjef', 500000, 1),
-	(DEFAULT, 'brn2', 'Fornavn 2', 'Etternavn 2', '2017-12-31', 'Stilling 2', 400000, 1),
-	(DEFAULT, 'brn3', 'Fornavn 3', 'Etternavn 3', '2017-06-01', 'Stilling 3', 600000, 2),
-	(DEFAULT, 'brn4', 'Fornavn 4', 'Etternavn 4', '2018-03-03', 'Stilling 4', 450000, 2),
-	(DEFAULT, 'brn5', 'Fornavn 5', 'Etternavn 5', '2016-01-01', 'Stilling 3', 600000, 3),
-	(DEFAULT, 'brn6', 'Adrian', 'Mortsensen', '2017-08-01', 'Avdelingssjef', 500000, 2),
-	(DEFAULT, 'brn7', 'Kristoffer', 'Nome', '2017-08-01', 'Avdelingssjef', 500000, 3),
-	(DEFAULT, 'brn8', 'Fornavn 8', 'Etternavn 8', '2017-02-03', 'Stilling 3', 400000, 2),
-	(DEFAULT, 'brn9', 'Fornavn 9', 'Etternavn 9', '2018-02-01', 'Stilling 4', 300000, 1),
-	(DEFAULT, 'br10', 'Fornavn 10', 'Etternavn 10', '2018-03-05', 'Stilling 3', 400000, 3),
-	(DEFAULT, 'br11', 'Fornavn 11', 'Etternavn 11', '2016-04-26', 'Stilling 2', 500000,1),
-	(DEFAULT, 'br12', 'Fornavn 12', 'Etternavn 12', '2017-06-25', 'Stilling 4', 400000, 3);
+	(DEFAULT, 'brn2', 'Ola', 'Nordmann', '2017-12-31', 'Medarbeider', 400000, 1),
+	(DEFAULT, 'brn3', 'Kari', 'Nordmann', '2017-06-01', 'Medarbeider', 600000, 2),
+	(DEFAULT, 'brn4', 'Per', 'Persen', '2018-03-03', 'Tekniker', 450000, 2),
+	(DEFAULT, 'brn5', 'Kristin', 'Kristensen', '2016-01-01', 'Medarbeider', 600000, 3),
+	(DEFAULT, 'admo', 'Adrian', 'Mortensen', '2017-08-01', 'Avdelingssjef', 500000, 2),
+	(DEFAULT, 'krno', 'Kristoffer', 'Nome', '2017-08-01', 'Avdelingssjef', 500000, 3),
+	(DEFAULT, 'brn8', 'Mari', 'Mikkelsen', '2017-02-03', 'Medarbeider', 400000, 2),
+	(DEFAULT, 'brn9', 'Erik', 'Eriksen', '2018-02-01', 'Tekniker', 300000, 1),
+	(DEFAULT, 'br10', 'Fredrik', 'Fredriksen', '2018-03-05', 'Medarbeider', 400000, 3),
+	(DEFAULT, 'br11', 'Line', 'Larsen', '2016-04-26', 'Ass. Avd. Sjef', 500000,1),
+	(DEFAULT, 'br12', 'Ida', 'Iversen', '2017-06-25', 'Tekniker', 400000, 3);
 	
 
 UPDATE avdeling SET sjef=1 WHERE avdelingsID = 1;
