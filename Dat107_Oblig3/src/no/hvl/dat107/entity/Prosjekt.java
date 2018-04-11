@@ -19,13 +19,13 @@ public class Prosjekt {
 	private String beskrivelse;
 
 	@OneToMany(mappedBy = "prosjekt")
-	private List<prosjektdeltagelse> deltagelser;
+	private List<Prosjektdeltakelse> deltagelser;
 
-	public void leggTilProsjektdeltagelse(prosjektdeltagelse prosjektdeltagelse) {
+	public void leggTilProsjektdeltagelse(Prosjektdeltakelse prosjektdeltagelse) {
 		deltagelser.add(prosjektdeltagelse);
 	}
 
-	public void fjernProsjektdeltagelse(prosjektdeltagelse prosjektdeltagelse) {
+	public void fjernProsjektdeltagelse(Prosjektdeltakelse prosjektdeltagelse) {
 		deltagelser.remove(prosjektdeltagelse);
 	}
 
@@ -53,11 +53,11 @@ public class Prosjekt {
 		this.beskrivelse = beskrivelse;
 	}
 
-	public List<prosjektdeltagelse> getDeltagelser() {
+	public List<Prosjektdeltakelse> getDeltagelser() {
 		return deltagelser;
 	}
 
-	public void setDeltagelser(List<prosjektdeltagelse> deltagelser) {
+	public void setDeltagelser(List<Prosjektdeltakelse> deltagelser) {
 		this.deltagelser = deltagelser;
 	}
 
