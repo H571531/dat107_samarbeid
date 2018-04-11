@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import no.hvl.dat107.eao.AnsattEAO;
-import no.hvl.dat107.eao.AvdelingEAO;
-import no.hvl.dat107.eao.ProsjektEAO;
-import no.hvl.dat107.eao.ProsjektdeltakelseEAO;
-import no.hvl.dat107.entity.Ansatt;
-import no.hvl.dat107.entity.Avdeling;
-import no.hvl.dat107.entity.Prosjekt;
-import no.hvl.dat107.entity.Prosjektdeltakelse;
+import no.hvl.dat107.entity.eao.AvdelingEAO;
+import no.hvl.dat107.entity.eao.ProsjektEAO;
+import no.hvl.dat107.entity.eao.ProsjektdeltakelseEAO;
+import no.hvl.dat107.entity.entity.Ansatt;
+import no.hvl.dat107.entity.entity.Avdeling;
+import no.hvl.dat107.entity.entity.Prosjekt;
+import no.hvl.dat107.entity.entity.Prosjektdeltakelse;
 
 public class Tekstgrensesnitt {
 	

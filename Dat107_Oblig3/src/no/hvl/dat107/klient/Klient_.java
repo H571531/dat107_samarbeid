@@ -1,6 +1,7 @@
 package no.hvl.dat107.klient;
 
-import no.hvl.dat107.*;
+import no.hvl.dat107.eao.AnsattEAO;
+import no.hvl.dat107.entity.*;
 
 public class Klient_ {
 
