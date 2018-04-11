@@ -10,7 +10,7 @@ CREATE TABLE ansatt(
 	etternavn VARCHAR(30),
 	ansettelsesDato DATE,
 	stilling VARCHAR(30),
-	maanedsloenn DECIMAL,
+	maanedsloenn DECIMAL(10,2),
 	avdelingsID INTEGER NOT NULL,
 	
 	CONSTRAINT ansattPK PRIMARY KEY(ansattID)
@@ -57,21 +57,21 @@ ALTER TABLE ansatt ADD CONSTRAINT avdelingFK FOREIGN KEY (avdelingsID) REFERENCE
 	
 INSERT INTO avdeling
 VALUES
-	(DEFAULT, 'Avdeling 1'),
-	(DEFAULT, 'Avdeling 2'),
-	(DEFAULT, 'Avdeling 3');
+	(DEFAULT, 'Administrasjon'),
+	(DEFAULT, 'Produksjon'),
+	(DEFAULT, 'Markedsføring');
 	
 
 
 INSERT INTO ansatt
 VALUES
-	(DEFAULT, 'brn1', 'Fornavn 1', 'Etternavn 1', '2018-01-01', 'Avdelingssjef', 500000, 1),
+	(DEFAULT, 'ansi', 'Anders', 'Simonsen', '2017-08-01', 'Avdelingssjef', 500000, 1),
 	(DEFAULT, 'brn2', 'Fornavn 2', 'Etternavn 2', '2017-12-31', 'Stilling 2', 400000, 1),
 	(DEFAULT, 'brn3', 'Fornavn 3', 'Etternavn 3', '2017-06-01', 'Stilling 3', 600000, 2),
 	(DEFAULT, 'brn4', 'Fornavn 4', 'Etternavn 4', '2018-03-03', 'Stilling 4', 450000, 2),
 	(DEFAULT, 'brn5', 'Fornavn 5', 'Etternavn 5', '2016-01-01', 'Stilling 3', 600000, 3),
-	(DEFAULT, 'brn6', 'Fornavn 6', 'Etternavn 6', '2016-02-05', 'Avdelingssjef', 500000, 2),
-	(DEFAULT, 'brn7', 'Fornavn 7', 'Etternavn 7', '2016-06-10', 'Avdelingssjef', 500000, 3),
+	(DEFAULT, 'brn6', 'Adrian', 'Mortsensen', '2017-08-01', 'Avdelingssjef', 500000, 2),
+	(DEFAULT, 'brn7', 'Kristoffer', 'Nome', '2017-08-01', 'Avdelingssjef', 500000, 3),
 	(DEFAULT, 'brn8', 'Fornavn 8', 'Etternavn 8', '2017-02-03', 'Stilling 3', 400000, 2),
 	(DEFAULT, 'brn9', 'Fornavn 9', 'Etternavn 9', '2018-02-01', 'Stilling 4', 300000, 1),
 	(DEFAULT, 'br10', 'Fornavn 10', 'Etternavn 10', '2018-03-05', 'Stilling 3', 400000, 3),

@@ -18,7 +18,7 @@ public class AnsattEAO {
 		emf = Persistence.createEntityManagerFactory("ansattPersistenceUnit");
 	}
 
-	public Ansatt finnAnsattMedPK(int AnsattId) {
+	public Ansatt finnAnsattMedId(int AnsattId) {
 
 		EntityManager em = emf.createEntityManager();
 
@@ -49,7 +49,7 @@ public class AnsattEAO {
 		}
 	}
 
-	public List<Ansatt> finnAlleAnsatte() {
+	public List<Ansatt> hentAlleAnsatte() {
 
 		EntityManager em = emf.createEntityManager();
 
@@ -84,13 +84,13 @@ public class AnsattEAO {
 
 	
 
-	public void updateAnsatt(Ansatt p) {
+	public void oppdaterAnsatt(Ansatt p) {
 
 		EntityManager em = emf.createEntityManager();
 
 		try {
 			em.getTransaction().begin();
-			Ansatt q = em.merge(p);
+			em.merge(p);
 
 			em.getTransaction().commit();
 
@@ -103,14 +103,14 @@ public class AnsattEAO {
 	}
 
 
-	public void deletePerson(Ansatt p) {
+	public void fjernAnsatt(Ansatt a) {
 
 
 		EntityManager em = emf.createEntityManager();
 
 		try {
 			em.getTransaction().begin();
-			em.remove(em.merge(p));
+			em.remove(a);
 			em.getTransaction().commit();
 
 		} catch (Throwable e) {

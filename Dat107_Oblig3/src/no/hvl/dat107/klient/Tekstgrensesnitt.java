@@ -1,19 +1,21 @@
 package no.hvl.dat107.klient;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 import no.hvl.dat107.eao.AnsattEAO;
-import no.hvl.dat107.entity.eao.AvdelingEAO;
-import no.hvl.dat107.entity.eao.ProsjektEAO;
-import no.hvl.dat107.entity.eao.ProsjektdeltakelseEAO;
-import no.hvl.dat107.entity.entity.Ansatt;
-import no.hvl.dat107.entity.entity.Avdeling;
-import no.hvl.dat107.entity.entity.Prosjekt;
-import no.hvl.dat107.entity.entity.Prosjektdeltakelse;
+import no.hvl.dat107.eao.AvdelingEAO;
+import no.hvl.dat107.eao.ProsjektEAO;
+import no.hvl.dat107.eao.ProsjektdeltakelseEAO;
+import no.hvl.dat107.entity.Ansatt;
+import no.hvl.dat107.entity.Avdeling;
+import no.hvl.dat107.entity.Prosjekt;
+import no.hvl.dat107.entity.Prosjektdeltakelse;
 
 public class Tekstgrensesnitt {
 	
@@ -47,7 +49,7 @@ public class Tekstgrensesnitt {
 		
 		for(Ansatt a: ansattListe) {
 			System.out.println(a);
-			gyldigId.add(a.getAnsattid());
+			gyldigId.add(a.getAnsattId());
 		}
 		System.out.print(lagStrek());
 		
@@ -124,7 +126,7 @@ public class Tekstgrensesnitt {
 				input = inn.next();
 				inn.nextLine();
 				if(input.equalsIgnoreCase("j")) {
-					oppdaterAnsatt(inn, ansatt.getAnsattid());
+					oppdaterAnsatt(inn, ansatt.getAnsattId());
 				} else {
 					System.out.println("Går tilbake til meny...\n");
 				}
@@ -189,7 +191,7 @@ public class Tekstgrensesnitt {
 				System.out.println("Skriv ansettelsesdato (YYYY-MM-DD): ");
 				
 				try {
-					a.setAnsettelsesdato(LocalDate.parse(inn.nextLine()));
+					a.setAnsettelsesDato(LocalDate.parse(inn.nextLine()));
 					ok = true;
 				} catch(DateTimeParseException e) {
 					System.out.println("Feil dato-format, Skriv YYYY-MM-DD, f. eks " + LocalDate.now());
@@ -204,8 +206,20 @@ public class Tekstgrensesnitt {
 			break;
 		case 6:
 			System.out.println("Angi ny månedslønn:");
-			a.setMaanedsloenn(inn.nextInt());
-			inn.nextLine();
+			
+			BigDecimal loenn = null;
+			do {
+				System.out.println("Skriv månedslønn: (#####,##)");
+				try {
+					loenn = inn.nextBigDecimal();
+					inn.nextLine();
+				}catch(InputMismatchException e) {
+					System.out.println("Feil format! Prøv å bruke komma i stedet for punktum.");
+					inn.nextLine();
+				}
+				
+			} while(loenn == null);
+			a.setMaanedsloenn(loenn.setScale(2));
 			ansEAO.oppdaterAnsatt(a);
 			break;
 		case 7:
@@ -347,9 +361,20 @@ public class Tekstgrensesnitt {
 		System.out.println("Skriv stillingstittel: ");
 		String stilling = inn.nextLine();
 		
-		System.out.println("Skriv månedslønn: ");
-		int loenn = inn.nextInt();
-		inn.nextLine();
+		BigDecimal loenn = null;
+		do {
+			System.out.println("Skriv månedslønn: (#####,##)");
+			try {
+				loenn = inn.nextBigDecimal();
+				inn.nextLine();
+			}catch(InputMismatchException e) {
+				System.out.println("Feil format! Prøv å bruke komma i stedet for punktum.");
+				inn.nextLine();
+			}
+			
+		} while(loenn == null);
+		
+		
 		
 		Avdeling avdeling = null;
 		do {
@@ -362,7 +387,7 @@ public class Tekstgrensesnitt {
 		} while(avdeling == null);
 		
 		
-		Ansatt nyAnsatt = new Ansatt(brukernavn, fornavn, etternavn, ansDato, stilling, loenn, avdeling);
+		Ansatt nyAnsatt = new Ansatt(brukernavn, fornavn, etternavn, ansDato, stilling, loenn.setScale(2), avdeling);
 		
 		
 		int nyId = ansEAO.settInnAnsatt(nyAnsatt);
@@ -655,6 +680,7 @@ public class Tekstgrensesnitt {
 			}
 			System.out.println("Prosjekt etter oppdatering:");
 			System.out.println(lagStrek());
+			
 			System.out.println(prosjektEAO.finnProsjektMedId(prosjekt.getProsjektid()));
 		} while(valg != 0);
 	}
