@@ -79,6 +79,7 @@ public class AnsattEAO {
 		return ut;
 	}
 
+	
 	public void updateAnsatt(Ansatt p) {
 
 		EntityManager em = emf.createEntityManager();
