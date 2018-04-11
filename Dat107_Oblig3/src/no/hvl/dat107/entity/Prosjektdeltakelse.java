@@ -4,19 +4,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
-//JPA-annotations
+//JPA-annotations 
+
 @Entity
 @Table(name = "prosjekt", schema = "oblig3")
+@IdClass(ProsjektdeltagelsePK.class)
 public class Prosjektdeltakelse {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int prosjektdeltagelse_Id;
 
 	private int timer;
 
@@ -24,9 +23,11 @@ public class Prosjektdeltakelse {
 	@JoinColumn(name = "ansattId")
 	private Ansatt ansatt;
 
-	@ManyToOne
-	@JoinColumn(name = "prosjektId")
-	private Prosjekt prosjekt;
+    @Id
+    @ManyToOne
+    @JoinColumn(name="ProsjektId")
+    private Prosjekt prosjekt;
+
 
 	public Prosjektdeltakelse() {
 	}
@@ -39,14 +40,6 @@ public class Prosjektdeltakelse {
 		// Hvis vi gjør dette her slipper vi å gjøre det i EAO
 		ansatt.leggTilProsjektdeltakelse(this);
 		prosjekt.leggTilProsjektdeltakelse(this);
-	}
-
-	public int getProsjektdeltagelse_Id() {
-		return prosjektdeltagelse_Id;
-	}
-
-	public void setProsjektdeltagelse_Id(int prosjektdeltagelse_Id) {
-		this.prosjektdeltagelse_Id = prosjektdeltagelse_Id;
 	}
 
 	public int getTimer() {
