@@ -104,7 +104,7 @@ public class ProsjektdeltakelseEAO {
 			
 			pd.setAnsatt(em.merge(pd.getAnsatt()));
 			pd.setProsjekt(em.merge(pd.getProsjekt()));
-			em.merge(pd);
+			pd = em.merge(pd);
 			
 			tx.commit();
 			
@@ -112,6 +112,28 @@ public class ProsjektdeltakelseEAO {
 			em.close();
 		}
 	}
+	
+	public Prosjektdeltakelse oppdaterPD2(Prosjektdeltakelse pd) {
+		EntityManager em = emf.createEntityManager();
+		
+		EntityTransaction tx = em.getTransaction();
+		
+		try {
+			tx.begin();
+			
+			
+			pd.setAnsatt(em.merge(pd.getAnsatt()));
+			pd.setProsjekt(em.merge(pd.getProsjekt()));
+			pd = em.merge(pd);
+			
+			tx.commit();
+			
+		}finally {
+			em.close();
+		}
+		return pd;
+	}
+	
 	
 	
 }

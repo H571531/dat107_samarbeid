@@ -1,5 +1,6 @@
 package no.hvl.dat107.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,12 +21,12 @@ public class Prosjektdeltakelse {
 	
 
 	@Id
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinColumn(name = "ansattId")
 	private Ansatt ansatt;
 
     @Id
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="prosjektId")
     private Prosjekt prosjekt;
 
@@ -41,8 +42,8 @@ public class Prosjektdeltakelse {
 		this.timer = timer;
 		this.rolle=rolle;
 
-		// Hvis vi gj�r dette her slipper vi � gj�re det i EAO
-		//ansatt.leggTilProsjektdeltakelse(this);
+		//Oppdaterer prosjekt og ansatt i constructor som kalles fra EAO
+		ansatt.getProsjektDeltakelser().add(this);
 		prosjekt.leggTilProsjektdeltakelse(this);
 	}
 
@@ -82,6 +83,14 @@ public class Prosjektdeltakelse {
 	public void skrivUt(String innrykk) {
 		System.out.printf("%sDeltagelse: %s %s, %s, %d timer", innrykk, ansatt.getFornavn(), ansatt.getEtternavn(),
 				prosjekt.getProsjektNavn(), timer);
+	}
+	
+	@Override
+	public String toString() {
+		String ut = "Prosjekt: " + prosjekt.getProsjektNavn() + " - Ansatt: " + ansatt.getAnsattid() + "(" + ansatt.getFornavn() + " " + ansatt.getEtternavn() + ") - " + rolle
+				+ " - Antall timer: " + timer;
+		
+		return ut;
 	}
 
 }

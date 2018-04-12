@@ -39,11 +39,14 @@ public class AnsattEAO {
 		EntityTransaction tx = em.getTransaction();
 
 		try {
+			tx.begin();
 			Avdeling avd = em.merge(a.getAnsattVed());
 	           
             em.persist(a);
             
             avd.getAnsattListe().add(a);
+            
+            tx.commit();
 
 		} catch (Throwable e) {
 			e.printStackTrace();
@@ -60,7 +63,7 @@ public class AnsattEAO {
 
 		List<Ansatt> ansatte = null;
 		try {
-			TypedQuery<Ansatt> query = em.createQuery("SELECT a FROM Ansatt a", Ansatt.class);
+			TypedQuery<Ansatt> query = em.createQuery("SELECT a FROM Ansatt a ORDER BY a.ansattid", Ansatt.class);
 			ansatte = query.getResultList();
 		} finally {
 			em.close();
@@ -80,7 +83,8 @@ public class AnsattEAO {
 			query.setParameter("brukernavn", brukernavn);
 			ut = query.getSingleResult();
 		} catch(NoResultException e) {
-			System.out.println("Finner ikke ansatt!");
+			//Gir tilbakemelding i Tekstgrensesnitt
+			//System.out.println("Finner ikke ansatt!\n");
 		} finally {
 			em.close();
 		}
@@ -109,19 +113,24 @@ public class AnsattEAO {
 
 
 	public void fjernAnsatt(Ansatt a) {
-
-
 		EntityManager em = emf.createEntityManager();
-
+		EntityTransaction tx = em.getTransaction();
+		
 		try {
-			em.getTransaction().begin();
+			tx.begin();
+			
+			
+			Avdeling avd = a.getAnsattVed();
+			
+			//Må være managed for å kunne fjernes
+			a = em.merge(a);
+			avd.getAnsattListe().remove(a);
+			
 			em.remove(a);
-			em.getTransaction().commit();
-
-		} catch (Throwable e) {
-			e.printStackTrace();
-			em.getTransaction().rollback();
-		} finally {
+			
+			
+			tx.commit();
+		}finally {
 			em.close();
 		}
 	}

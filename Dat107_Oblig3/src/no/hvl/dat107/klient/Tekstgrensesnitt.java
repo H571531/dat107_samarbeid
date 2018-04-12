@@ -38,16 +38,7 @@ public class Tekstgrensesnitt {
 	 * @param inn Tastatur
 	 */
 	public void visAlleAnsatte(Scanner inn) {
-		System.out.println("aaa");
-		Ansatt ansatt = ansEAO.finnAnsattMedId(1);
-		System.out.println(ansatt.getAnsattid());
-		System.out.println(ansatt.getBrukernavn());
-		System.out.println(ansatt.getFornavn());
-		System.out.println(ansatt.getStilling());
-		System.out.println(ansatt.getAnsettelsesdato());
-		System.out.println(ansatt.getMaanedsloenn());
-		
-		//System.out.println("aaaa" + ansatt.getMaanedsloenn().toString());
+			
 		
 		System.out.println("Viser alle ansatte: ");
 		System.out.print(Ansatt.lagTabellOverskrift());
@@ -127,7 +118,7 @@ public class Tekstgrensesnitt {
 			
 			
 			if(ansatt == null) {
-				System.out.println("Finner ikke ansatt!");
+				System.out.println("Finner ikke ansatt!\n");
 			} else {
 				System.out.println("Fant ansatt!");
 				System.out.print(lagStrek());
@@ -253,19 +244,27 @@ public class Tekstgrensesnitt {
 				}
 				
 				
+				
 			} while(avdeling == null);
 			
 			
 			//Fjern fra gamle avdeling
 			Avdeling gammelAvd = a.getAnsattVed();
-			gammelAvd.getAnsattListe().remove(a);
-			avdEAO.oppdaterAvdeling(gammelAvd);
 			
-			//Må sette både at ansatt er ansatt ved avdeling, og legge til ansatt i avdelingens liste over ansatte
-			a.setAnsattVed(avdeling);
-			avdeling.leggTilAnsatt(a);
-			avdEAO.oppdaterAvdeling(avdeling);
-			ansEAO.oppdaterAnsatt(a);
+			//Angitt i oppgave: en avdeling MÅ ha minst en ansatt
+			if(gammelAvd.getAnsattListe().size() == 1) {
+				System.out.println("En avdeling må ha minst en ansatt!");
+			} else {
+				gammelAvd.getAnsattListe().remove(a);
+				avdEAO.oppdaterAvdeling(gammelAvd);
+				
+				//Må sette både at ansatt er ansatt ved avdeling, og legge til ansatt i avdelingens liste over ansatte
+				a.setAnsattVed(avdeling);
+				avdeling.leggTilAnsatt(a);
+				avdEAO.oppdaterAvdeling(avdeling);
+				ansEAO.oppdaterAnsatt(a);
+			}
+			
 			break;
 		case 8:
 			System.out.println("Tilgjengelige prosjekter:");
@@ -274,14 +273,7 @@ public class Tekstgrensesnitt {
 			//Hent alle prosjekter
 			
 			List<Prosjekt> alleProsjekter = prosjektEAO.hentAlleProsjekt();
-			//(fjern prosjekter den ansatte allerede hører til - FUNGERER IKKE)
-			/*
-			for(Prosjektdeltakelse pd: a.getProsjektDeltakelser()) {
-				if(alleProsjekter.contains(pd.getProsjekt())) {
-					alleProsjekter.remove(pd.getProsjekt());
-				}
-			}
-			*/
+			
 			for(Prosjekt prosjekt: alleProsjekter) {
 				System.out.println(prosjekt);
 				System.out.print(lagStrek());
@@ -500,6 +492,38 @@ public class Tekstgrensesnitt {
 		
 	}
 	
+	public void leggTilAvdeling(Scanner inn) {
+		System.out.println("\n---Legger til ny avdeling---\n");
+		
+		System.out.println("Skriv avdelingsnavn:");
+		String navn = inn.nextLine();
+		
+		int sjefsID = -1;
+		Ansatt nySjef = null;
+		do {
+			System.out.println("Skriv ansattID til ansatt som skal være sjef i den nye avdelingen:");
+			sjefsID = inn.nextInt();
+			inn.nextLine();
+			
+			nySjef = ansEAO.finnAnsattMedId(sjefsID);
+			if(nySjef.getSjefFor() != null) {
+				System.out.println("Kan ikke flytte en sjef fra en annen avdeling!");
+				nySjef = null;
+			}
+			
+		} while(nySjef == null);
+		
+		//Avdeling nyAvd = new Avdeling(navn, nySjef);
+		
+		
+		//int nyID = avdEAO.lagAvdeling(nyAvd);
+		int nyID = avdEAO.lagAvdeling(navn, nySjef);
+		nySjef = ansEAO.finnAnsattMedId(nySjef.getAnsattid());
+		System.out.println("Laget ny avdeling: \n");
+		System.out.println(avdEAO.finnAvdelingMedId(nyID) + "\n");
+	}
+	
+	
 	/**
 	 * Finner en avdeling med gitt avdelingsID, og oppdaterer enten avdelingens navn, eller avdelingens sjef, gjennom tastaturet.
 	 * @param inn Tastatur
@@ -515,6 +539,7 @@ public class Tekstgrensesnitt {
 		System.out.println("Angi hva som skal oppdateres: ");
 		System.out.println("1. Avdelingsnavn");
 		System.out.println("2. Sjef for avdelingen");
+		System.out.println("3. Slett avdeling");
 		
 		int valg = inn.nextInt();
 		inn.nextLine();
@@ -547,6 +572,18 @@ public class Tekstgrensesnitt {
 			
 			avdEAO.oppdaterNySjef(avdeling, nySjef);
 			
+			break;
+		case 3:
+			if(avdeling.getAnsattListe().size() > 0) {
+				System.out.println("Kan ikke slette en avdeling som har ansatte!");
+				break;
+			} else {
+				avdEAO.fjernAvdeling(avdeling);
+				return;
+			}
+			
+		default:
+			System.out.println("Ugyldig valg!");
 			break;
 			
 		}
@@ -609,7 +646,10 @@ public class Tekstgrensesnitt {
 		
 		Prosjekt prosjekt = new Prosjekt(navn, beskrivelse);
 		
-		prosjektEAO.settInnProsjekt(prosjekt);
+		int nyId = prosjektEAO.settInnProsjekt(prosjekt);
+		
+		System.out.println("La til prosjekt:\n ");
+		System.out.println(prosjektEAO.finnProsjektMedId(nyId));
 		
 	}
 	
@@ -628,11 +668,13 @@ public class Tekstgrensesnitt {
 		int valg = 0;
 		
 		do{
+			System.out.println("---PROSJEKTOPPDATERING---");
 			System.out.println("1. Oppdater prosjektnavn");
 			System.out.println("2. Oppdater prosjektbeskrivelse");
 			System.out.println("3. Legg til en ansatt til et prosjekt");
 			System.out.println("4. Oppdater timer på prosjekt for en ansatt");
 			System.out.println("5. Fjern en ansatt");
+			System.out.println("6. Fjern prosjekt");
 			System.out.println(lagStrek());
 			System.out.println("0. Avbryt");
 			
@@ -678,13 +720,25 @@ public class Tekstgrensesnitt {
 				inn.nextLine();
 				
 				pdTilOppdatering.setTimer(antallTimer);
-				pdEAO.oppdaterPD(pdTilOppdatering);
+				//pdEAO.oppdaterPD(pdTilOppdatering);
+				pdTilOppdatering = pdEAO.oppdaterPD2(pdTilOppdatering);
 				
 				
 				break;
 			case 5:
 				fjernProsjektdeltakelse(inn, null, prosjekt);
 				break;
+			case 6:
+				if(prosjekt.getDeltakelser().size() > 0) {
+					System.out.println("Kan ikke fjerne prosjekt som har ansatte tilknyttet seg!");
+					break;
+				} else {
+					prosjektEAO.fjernProsjekt(prosjekt);
+					return;
+				}
+				
+				//Fremdeles inne i meny for behandling av prosjekt - derfor return i stedet for break
+				
 			case 0:
 				return;
 				
@@ -692,7 +746,9 @@ public class Tekstgrensesnitt {
 			System.out.println("Prosjekt etter oppdatering:");
 			System.out.println(lagStrek());
 			
-			System.out.println(prosjektEAO.finnProsjektMedId(prosjekt.getProsjektId()));
+			//Oppdater referansen til prosjekt - kunne forandret til å returnere prosjekt etter merge i oppdatering, men vanskelig å få til tilfredsstillende med oppdatering av prosjektdeltakelse og ikke prosjekt
+			prosjekt = prosjektEAO.finnProsjektMedId(prosjekt.getProsjektId());
+			System.out.println(prosjekt);
 		} while(valg != 0);
 	}
 	

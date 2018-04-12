@@ -1,5 +1,6 @@
 package no.hvl.dat107.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,33 +26,57 @@ public class Avdeling {
 	
 	private String navn;
 	
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToOne(cascade = {CascadeType.MERGE})
 	@JoinColumn(name="sjef", nullable=false)
 	private Ansatt sjef;
 	
-	@OneToMany(mappedBy="ansattVed", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@OneToMany(mappedBy="ansattVed", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
 	private List<Ansatt> ansattListe;
 	
+	
+	public Avdeling() {
+		
+	}
+	
+	public Avdeling(String navn, Ansatt sjef) {
+		this.navn = navn;
+		this.sjef = sjef;
+		
+		ansattListe = new ArrayList<Ansatt>();
+		Avdeling gammelAvdeling = sjef.getAnsattVed();
+		gammelAvdeling.getAnsattListe().remove(sjef);
+		sjef.setAnsattVed(this);
+		ansattListe.add(sjef);
+		this.sjef = sjef;
+		sjef.setStilling("Avdelingssjef");
+
+		
+	}
 	
 	/**
 	 * Setter ny sjef for avdelingen, setter den nye sjefens sjef-attributt til denne avdelingen, og setter den gamle sjefens sjef-attributt til null, samt oppdaterer stiling for begge to.
 	 * @param sjef
 	 */
 	public void setSjef(Ansatt sjef) {
+		
+		
+		
 		Ansatt gammelSjef = this.sjef;
 		
 		this.sjef = sjef;
 		
-		//sjef.setStilling("Sjef A" + this.avdelingsID);
-		sjef.setStilling("Sjef A" + this.avdelingsID);
-		//this.sjef = sjef;
+		sjef.setStilling("Avdelingssjef");
 		this.sjef = sjef;
 		sjef.setSjefFor(this);
 		
-		gammelSjef.setSjefFor(null);
+		//Sjekk om gammel sjef, bruker samme metode for ny avdeling som ikke har sjef
+		if(gammelSjef != null) {
+			gammelSjef.setSjefFor(null);
+			
+			//gammelSjef.setStilling("Tidl. sjef");
+			gammelSjef.setStilling("Tidl. sjef");
+		}
 		
-		//gammelSjef.setStilling("Tidl. sjef");
-		gammelSjef.setStilling("Tidl. sjef");
 		
 	}
 

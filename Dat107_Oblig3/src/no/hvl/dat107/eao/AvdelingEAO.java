@@ -30,14 +30,24 @@ public class AvdelingEAO {
 		return avdeling;
 	}
 	
-	public void lagAvdeling(Avdeling p) {
+	public int lagAvdeling(String navn, Ansatt nySjef) {
 		
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = em.getTransaction();
 		
+		Avdeling nyAvd = null;
+		
 		try {
 			tx.begin();
-			em.persist(p);
+			
+			nySjef = em.merge(nySjef);
+			Avdeling gammelAvd = em.merge(nySjef.getAnsattVed());
+			nyAvd = new Avdeling(navn, nySjef);
+			
+			
+			em.persist(nyAvd);
+			
+			
 			tx.commit();
 		} catch(Throwable e) {
 			e.printStackTrace();
@@ -45,6 +55,7 @@ public class AvdelingEAO {
 		} finally {
 			em.close();
 		}
+		return nyAvd.getAvdelingsID();
 	}
 	
 	public List<Avdeling> hentAlleAvdelinger() {
@@ -91,6 +102,24 @@ public class AvdelingEAO {
 			avdeling.setSjef(ansatt);
 			
 			tx.commit();
+		} finally {
+			em.close();
+		}
+	}
+	
+	public void fjernAvdeling(Avdeling avdeling) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		
+		try {
+			System.out.print("Sletter avdeling...");
+			tx.begin();
+			
+			avdeling = em.merge(avdeling);
+			em.remove(avdeling);
+			
+			tx.commit();
+			System.out.println("OK!");
 		} finally {
 			em.close();
 		}

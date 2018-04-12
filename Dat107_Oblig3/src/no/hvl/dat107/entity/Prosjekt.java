@@ -51,7 +51,8 @@ public class Prosjekt {
 		} else {
 			sb.append("INGEN");
 		}
-		sb.append("\nTotalt antall timer: " + totaleTimer);
+		sb.append("\nTotalt antall timer:" + totaleTimer);
+		sb.append("\n" + Tekstgrensesnitt.lagStrek() + "\n");
 		return sb.toString();
 	}
 	
