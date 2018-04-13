@@ -14,6 +14,8 @@ CREATE TABLE ansatt(
 	avdelingsID INTEGER NOT NULL,
 	
 	CONSTRAINT ansattPK PRIMARY KEY(ansattID)
+	
+	--Setter fk constraint etter avdeling er opprettet
 	--CONSTRAINT avdelingFK FOREIGN KEY (avdelingsID) REFERENCES avdeling(avdelingsID)
 	);
 	
@@ -25,6 +27,7 @@ CREATE TABLE avdeling(
 
 	CONSTRAINT avdelingPK PRIMARY KEY(avdelingsID),
 	CONSTRAINT sjefFK FOREIGN KEY (sjef) REFERENCES ansatt(ansattID)
+	--setter constraint sjef IS NOT NULL etter at ansatte er satt som sjefer
 	
 
 );
@@ -39,7 +42,6 @@ CREATE TABLE prosjekt(
 );
 
 CREATE TABLE prosjektdeltakelse(
-	--lager surrogatnøkkel for lettere JPA
 	ansattid INTEGER,
 	prosjektid INTEGER,
 	timer INTEGER,
@@ -85,7 +87,6 @@ UPDATE avdeling SET sjef=7 WHERE avdelingsID = 3;
 
 ALTER TABLE avdeling ALTER COLUMN sjef SET NOT NULL;
 
---ALTER TABLE avdeling ADD CONSTRAINT sjefMaaVaereIAvdeling CHECK(sjef IN(SELECT ansattid FROM ansatt WHERE ansatt.avdeling = avdelingsid));
 
 INSERT INTO prosjekt
 VALUES
