@@ -32,7 +32,8 @@ public class ProsjektdeltakelseEAO {
 			Prosjektdeltakelse pd = new Prosjektdeltakelse(ansatt, prosjekt, rolle, 0);
 			em.persist(pd);
 			//Dårlig håndtering av Exception hvis pd allerede finnes! Vil bli lagt til som objekt som vises i menyene selv om rollback skjer
-			//Heller ha oppdatering av ansatt og prosjekt etter persist()?
+			
+			//v2.0 - kontrollerer i meny om ansatt allerede er koblet til prosjektet
 			
 			tx.commit();
 		} catch(AlleredeAnsattException e) {

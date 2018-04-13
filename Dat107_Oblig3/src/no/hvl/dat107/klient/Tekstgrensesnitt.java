@@ -71,7 +71,7 @@ public class Tekstgrensesnitt {
 			}
 			
 			
-		} while(valg != 0 || valg < ansattListe.size());
+		} while(valg != 0);
 	}
 
 	/**
@@ -274,18 +274,43 @@ public class Tekstgrensesnitt {
 			
 			List<Prosjekt> alleProsjekter = prosjektEAO.hentAlleProsjekt();
 			
+			//Opprett liste over prosjekter den ansatte allerede arbeider på
+			// - for å unngå at en prøver å opprette en prosjektdeltakelse som allerede eksisterer
+			List<Prosjektdeltakelse> arbeiderAlleredePaa = a.getProsjektDeltakelser();
+			ArrayList<Integer> ugyldigProsjekt = new ArrayList<Integer>();
+			for(Prosjektdeltakelse pd: arbeiderAlleredePaa) {
+				ugyldigProsjekt.add(pd.getProsjekt().getProsjektId());
+			}
+			
+			
 			for(Prosjekt prosjekt: alleProsjekter) {
 				System.out.println(prosjekt);
 				System.out.print(lagStrek());
 			}
 			
-			System.out.println("Skriv prosjektid den ansatte skal legges til: ");
-			Prosjekt nyttProsjekt = prosjektEAO.finnProsjektMedId(inn.nextInt());
-			inn.nextLine();
+			Prosjekt nyttProsjekt = null;
+			int nyttProsjektId= -1;
+			do {
+				System.out.println("Skriv prosjektid den ansatte skal legges til: ");
+				nyttProsjektId = inn.nextInt();
+				inn.nextLine();
+				
+				if(ugyldigProsjekt.contains(nyttProsjektId)) {
+					System.out.println("Den ansatte arbeider allerede på prosjekt nr. " + nyttProsjektId + "!\n");
+					nyttProsjektId = -1;
+				} else {
+					nyttProsjekt = prosjektEAO.finnProsjektMedId(nyttProsjektId);
+					if(nyttProsjekt == null) {
+						System.out.println("Ugyldig prosjektID!\n");
+					}
+				}
+				
+			} while(nyttProsjektId == -1 || nyttProsjekt == null);
+			
+			
 			
 			System.out.println("Skriv rolle den ansatte skal ha i prosjektet: ");
 			
-			//Prosjektdeltakelse nyPD = new Prosjektdeltakelse(a, nyttProsjekt, inn.nextLine(), 0);
 			pdEAO.leggTilPD(nyttProsjekt, a, inn.nextLine());
 			break;
 			
@@ -319,7 +344,6 @@ public class Tekstgrensesnitt {
 			break;
 		}
 		
-		//ansEAO.oppdaterAnsatt(a);
 		
 		System.out.println("Oppdaterte den ansatte:");
 		System.out.println(ansEAO.finnAnsattMedId(a.getAnsattid()).toStringMedProsjektTimer());
@@ -394,9 +418,6 @@ public class Tekstgrensesnitt {
 		
 		
 		int nyId = ansEAO.settInnAnsatt(nyAnsatt);
-		
-		//avdeling.getAnsatte().add(nyAnsatt);
-		//avdEAO.oppdaterAvdeling(avdeling);
 		
 		System.out.println(ansEAO.finnAnsattMedId(nyId).toStringMedProsjektTimer());
 		
@@ -513,12 +534,9 @@ public class Tekstgrensesnitt {
 			
 		} while(nySjef == null);
 		
-		//Avdeling nyAvd = new Avdeling(navn, nySjef);
 		
-		
-		//int nyID = avdEAO.lagAvdeling(nyAvd);
 		int nyID = avdEAO.lagAvdeling(navn, nySjef);
-		nySjef = ansEAO.finnAnsattMedId(nySjef.getAnsattid());
+
 		System.out.println("Laget ny avdeling: \n");
 		System.out.println(avdEAO.finnAvdelingMedId(nyID) + "\n");
 	}
@@ -556,7 +574,7 @@ public class Tekstgrensesnitt {
 			inn.nextLine();
 			
 			if(nySjef.getSjefFor() != null) {
-				System.out.println("Kan ikke flytte en avdelingssjef uten å først sette en ny sjef!");
+				System.out.println("Kan ikke flytte en avdelingssjef uten å først sette en ny sjef i den tilhørende avdelingen!");
 				return;
 			}
 			
@@ -589,8 +607,7 @@ public class Tekstgrensesnitt {
 		}
 		//
 		System.out.println("Avdeling etter oppdatering: ");
-		System.out.println(avdeling);
-		//Får ikke vist oppdatert avdeling med bare å bare printe avdeling her
+		//System.out.println(avdeling);
 		System.out.println(avdEAO.finnAvdelingMedId(avdeling.getAvdelingsID()));
 		
 		
@@ -697,9 +714,28 @@ public class Tekstgrensesnitt {
 				break;
 			case 3:
 				//Legg til ansatt
-				System.out.println("Skriv ansattid på ansatt som skal legges til: ");
-				Ansatt ans = ansEAO.finnAnsattMedId(inn.nextInt());
-				inn.nextLine();
+				
+				//Kontrollere at en ikke prøver å opprette en prosjektdeltakelse som allerede eksisterer
+				ArrayList<Integer> ugyldigAnsattId = new ArrayList<Integer>();
+				
+				for(Prosjektdeltakelse pd: prosjekt.getDeltakelser()) {
+					ugyldigAnsattId.add(pd.getAnsatt().getAnsattid());
+				}
+				
+				int nyAnsattId = -1;
+				do {
+					System.out.println("Skriv ansattid på ansatt som skal legges til: ");
+					nyAnsattId = inn.nextInt();
+					inn.nextLine();
+					
+					if(ugyldigAnsattId.contains(nyAnsattId)) {
+						System.out.println("Den ansatte arbeider allerede på prosjektet!\n");
+						nyAnsattId = -1;
+					}
+				} while(nyAnsattId == -1);
+				
+				Ansatt ans = ansEAO.finnAnsattMedId(nyAnsattId);
+				
 				System.out.println("Skriv rolle den ansatte skal ha i prosjektet: ");
 				
 				pdEAO.leggTilPD(prosjekt, ans, inn.nextLine());

@@ -46,6 +46,7 @@ public class AvdelingEAO {
 			
 			
 			em.persist(nyAvd);
+			nyAvd.getSjef().setSjefFor(nyAvd);
 			
 			
 			tx.commit();
