@@ -76,4 +76,22 @@ public class ProsjektEAO {
 		
 		return prosjekt.getProsjektId();
 	}
+	
+	public void fjernProsjekt(Prosjekt prosjekt) {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		
+		try {
+			System.out.println("Fjerner prosjekt...");
+			tx.begin();
+			
+			prosjekt = em.merge(prosjekt);
+			em.remove(prosjekt);
+			
+			tx.commit();
+			System.out.println("OK!\n");
+		} finally {
+			em.close();
+		}
+	}
 }

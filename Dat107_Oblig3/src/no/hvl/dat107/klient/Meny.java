@@ -28,9 +28,11 @@ public class Meny {
 			System.out.println("-------------------------------");
 			System.out.println("4. Vis/Oppdater avdelinger");
 			System.out.println("5. Vis en bestemt avdeling");
+			System.out.println("6. Lag ny avdeling");
 			
 			System.out.println("-------------------------------");
-			System.out.println("6. Vis/Oppdater prosjekter");
+			System.out.println("7. Legg til nytt prosjekt");
+			System.out.println("8. Vis/Oppdater prosjekter");
 			System.out.println("0. Avslutt");
 			
 			
@@ -55,9 +57,17 @@ public class Meny {
 				grensesnitt.visEnAvdeling(inn);
 				break;
 			case 6:
+				grensesnitt.leggTilAvdeling(inn);
+				break;
+			case 7:
+				grensesnitt.leggTilProsjekt(inn);
+				break;
+			case 8:
 				grensesnitt.visAlleProsjekter(inn);
 				break;
-			
+			default:
+				System.out.println("Ugyldig valg!\n");
+				break;
 			}
 		} while(valg != 0);
 		
